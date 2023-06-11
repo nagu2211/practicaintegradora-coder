@@ -1,0 +1,43 @@
+<section class="products">
+    <h1>ALL PRODUCTS WITH SOCKET</h1>
+    <div class="all-products" id="dinamicProd">
+        {{#each promiseProducts}}
+        <div class="product">
+            <img src={{this.thumbnail}} alt="img-product">
+            <div class="product-info">
+                <h4 class="product-title">{{this.title}}</h4>
+                <p><span>id <i class="fa-solid fa-arrow-down"></i></span><br>{{this.id}}</p>
+                <p><span>description <i class="fa-solid fa-arrow-down"></i></span><br>{{this.description}}</p>
+                <p><span>code <i class="fa-solid fa-arrow-down"></i></span><br>{{this.code}}</p>
+                <p><span>stock <i class="fa-solid fa-arrow-down"></i></span><br>{{this.stock}}k</p>
+                <p><span>category <i class="fa-solid fa-arrow-down"></i></span><br>{{this.category}}</p>
+                <p><span>price <i class="fa-solid fa-arrow-down"></i></span><br>${{this.price}}(ARS)/k</p>
+                <p><span>status <i class="fa-solid fa-arrow-down"></i></span><br>{{this.status}}</p>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</section>
+<h3 class="titleForm"><i class="fa-solid fa-arrow-down"></i> PRODUCT MANAGER LIVE <i class="fa-solid fa-arrow-down"></i></h3>
+<div class="containerForm">
+    <form id="prodForm">
+        <input type="text" id="form-title" placeholder="Product title" required>
+        <input type="text" id="form-thumbnail" placeholder="Product thumbnail" required>
+        <input type="text" id="form-description" placeholder="Product description" required>
+        <input type="text" id="form-code" placeholder="Product code" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <input type="text" id="form-stock" placeholder="Product stock" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <input type="text" id="form-category" placeholder="Product category" required>
+        <input type="text" id="form-price" placeholder="Product price" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <button class="btnAdd" type="submit" id="form-btn-add">Add product</button>
+    </form>
+    <div class="containerForm">
+    <form id="prodFormDel">
+        <input type="text" id="form-idProd" placeholder="Product id" required>
+        <button class="btnDel" type="submit" id="form-btn-del">Delete product</button>
+    </form>
+</div>
+</div>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
