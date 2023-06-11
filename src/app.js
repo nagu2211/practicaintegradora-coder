@@ -49,6 +49,10 @@ socketServer.on("connection", (socket) => {
     const promiseProducts = await productM.readProducts();
     socketServer.emit("products", promiseProducts)
   })
+
+  socket.on("msg_front_to_back", async (msg) => {
+    console.log(msg)
+  });
 });
 
 
