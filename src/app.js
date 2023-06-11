@@ -7,6 +7,7 @@ import { productsRouter } from "./routes/products.router.js";
 import { viewsRouter } from "./routes/views.router.js";
 import { __dirname } from "./utils.js";
 import productManager from './components/ProductManager.js'
+import { chatRouter } from "./routes/chat.router.js";
 
 const productM = new productManager();
 const allProducts = productM.readProducts();
@@ -55,6 +56,7 @@ socketServer.on("connection", (socket) => {
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use("/products", viewsRouter);
+app.use("/chat", chatRouter)
 
 app.get("*", (req, res) => {
   return res
