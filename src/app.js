@@ -32,6 +32,8 @@ const socketServer = new Server(httpServer);
 
 const initialProducts = productM.readProducts();
 
+let msgs = [];
+
 socketServer.on("connection", (socket) => {
   console.log("cliente conectado");
 
@@ -49,10 +51,14 @@ socketServer.on("connection", (socket) => {
     const promiseProducts = await productM.readProducts();
     socketServer.emit("products", promiseProducts)
   })
-
+ //chat with socket (atrapo el msg del front en el back y pongo un socketServer.emit para enviar ese msg a todos los usuarios)
   socket.on("msg_front_to_back", async (msg) => {
-    console.log(msg)
+    msgs.push(msg);
+    socketServer.emit("listado_de_msgs", msgs);
   });
+  socket.on("vaciar_chat",async() => {
+    msgs.splice(0,msgs.length)
+  })
 });
 
 
@@ -60,7 +66,7 @@ socketServer.on("connection", (socket) => {
 app.use("/api/products/", productsRouter);
 app.use("/api/carts/", cartsRouter);
 app.use("/products", viewsRouter);
-app.use("/chat", chatRouter)
+app.use("/chat", chatRouter);
 
 app.get("*", (req, res) => {
   return res

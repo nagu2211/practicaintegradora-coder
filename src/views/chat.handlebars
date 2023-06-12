@@ -1,7 +1,7 @@
 <h1>Chat en tiempo real con socket</h1>
 
 <h1>Listado de msgs</h1>
-<div id="msgs">
+<div id="div-msgs">
     Loading...
 </div>
 
@@ -9,7 +9,8 @@
     <p>ingrese su mensaje:</p>
     <input id="input-msg" type="text" placeholder="ingrese su msg"/>
 </div>
-
+<button id="vaciarChat">Vaciar Chat</button>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/chat.js"></script>
