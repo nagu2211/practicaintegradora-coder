@@ -6,6 +6,8 @@ import { usersRouter } from "./routes/users.router.js";
 import { connectMongo } from "./utils/dbConnection.js";
 import { connectSocketServer } from "./utils/socketServer.js";
 import { productsRouter } from "./routes/products.router.js";
+import { viewsRouter } from "./routes/views.router.js";
+import {cartsRouter} from "./routes/carts.router.js"
 
 const PORT = 8080;
 const app = express();
@@ -26,8 +28,8 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
-// app.use("/api/carts/", cartsRouter);
-// app.use("/products", viewsRouter);
+app.use("/api/carts/", cartsRouter);
+app.use("/products", viewsRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/chat", chatRouter);
