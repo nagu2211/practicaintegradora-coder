@@ -1,115 +1,168 @@
 import express from "express";
-import productManager from "../DAO/ProductManager.js";
-
+import { productService } from "../services/product.service.js";
 
 export const productsRouter = express.Router();
-const productM = new productManager();
-const allProducts = productM.readProducts();
 
 productsRouter.get("/", async (req, res) => {
-  let limit = parseInt(req.query.limit);
-  if (!limit) {
-    return res.status(200).json({
-      status: "success",
-      msg: "all products",
-      payload: await allProducts,
+  try {
+    let limit = parseInt(req.query.limit);
+    const products = await productService.getAll();
+    if (!limit) {
+      return res.status(200).json({
+        status: "success",
+        msg: "all products",
+        payload: products,
+      });
+    } else {
+      let productLimit = products.slice(0, limit);
+      return res.status(200).json({
+        status: "success",
+        msg: `limit of displayed products: ${limit} `,
+        payload: productLimit,
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: "error",
+      msg: "something went wrong :(",
+      payload: {},
     });
-  } else {
-    let promiseProducts = await allProducts;
-    let productLimit = promiseProducts.slice(0, limit);
-    return res.status(200).json({
-      status: "success",
-      msg: `limit of displayed products: ${limit} `,
-      payload: productLimit,
+  }
+});
+
+productsRouter.get("/:_id", async (req, res) => {
+  try {
+    const _id = req.params._id;
+    const products = await productService.getAll();
+    const productById = products.some((prod) => prod.id === _id);
+    if (productById) {
+      return res.status(200).json({
+        status: "success",
+        msg: "product found",
+        payload: await productService.getProductById(_id),
+      });
+    } else {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "product not found", payload: {} });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: "error",
+      msg: "something went wrong :(",
+      payload: {},
     });
   }
 });
 
 productsRouter.post("/", async (req, res) => {
-  let newProduct = req.body;
-  let promiseProducts = await allProducts;
-  let repeated = promiseProducts.some((prod) => prod.code == newProduct.code);
-  if (
-    newProduct.title == undefined ||
-    newProduct.description == undefined ||
-    newProduct.code == undefined ||
-    newProduct.price == undefined ||
-    newProduct.stock == undefined ||
-    newProduct.category == undefined
-  ) {
-    return res
-      .status(404)
-      .json({ status: "error", msg: "All fields are required", payload: {} });
-  } else if (repeated) {
-    return res
-      .status(404)
-      .json({
+  try {
+    const { title, description, code, price, stock, category, thumbnail } =
+      req.body;
+    const products = await productService.getAll();
+    let repeated = products.some((prod) => prod.code == code);
+
+    if (!title || !description || !code || !price || !stock || !category) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "All fields are required", payload: {} });
+    } else if (repeated) {
+      return res.status(404).json({
         status: "error",
         msg: "Not added: the product is repeated",
         payload: {},
       });
-  } else {
-    await productM.addProduct(newProduct);
-    res
-      .status(201)
-      .json({ status: "success", msg: "product added", payload: newProduct });
+    } else {
+      const productAdded = await productService.addProduct({
+        title,
+        description,
+        code,
+        price,
+        stock,
+        category,
+        thumbnail,
+      });
+      return res.status(201).json({
+        status: "success",
+        msg: "product added",
+        payload: {
+          _id: productAdded._id,
+          title: productAdded.title,
+          description: productAdded.description,
+          code: productAdded.code,
+          price: productAdded.price,
+          stock: productAdded.stock,
+          category: productAdded.category,
+          thumbnail: productAdded.thumbnail,
+        },
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: "error",
+      msg: "something went wrong :(",
+      payload: {},
+    });
   }
 });
 
 //en el body poner el id del producto, su elemento a cambiar y su contenido (no todo el objeto)
-productsRouter.put("/:pid", async (req, res) => {
-  const id = req.params.pid;
-  const updaProd = req.body;
-  let promiseProducts = await allProducts;
+productsRouter.put("/:_id", async (req, res) => {
+  try {
+    const _id = req.params._id;
+    const updaProd = req.body;
+    const products = await productService.getAll();
 
-  const elemento = promiseProducts.some((el) => el.id === id);
+    const elemento = products.some((el) => el.id === _id);
 
-  if (!elemento) {
-    return res
-      .status(404)
-      .json({ status: "error", msg: "product not found", payload: {} });
-  } else {
-    // Actualizar solo las propiedades especificadas
-    return res
-      .status(200)
-      .json({
+    if (!elemento) {
+      return res
+        .status(404)
+        .json({ status: "error", msg: "product not found", payload: {} });
+    } else {
+      // Actualizar solo las propiedades especificadas
+      return res.status(200).json({
         status: "success",
         msg: "product updated",
-        payload: await productM.updateProduct(id, updaProd),
+        payload: await productService.updateProduct(_id, updaProd),
       });
-  }
-});
-
-productsRouter.delete("/:pid", async (req, res) => {
-  let id = req.params.pid;
-  let promiseProducts = await allProducts;
-  let productFound = promiseProducts.some((prod) => prod.id === id);
-  if (productFound) {
-    return res.status(200).json({
-      status: "success",
-      msg: "product eliminated",
-      payload: await productM.deleteProduct(id),
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: "error",
+      msg: "something went wrong :(",
+      payload: {},
     });
   }
-  return res
-    .status(404)
-    .json({ status: "error", msg: "product not found", payload: {} });
 });
 
-productsRouter.get("/:pid", async (req, res) => {
-  let id = req.params.pid;
-  let promiseProducts = await allProducts;
-  let productById = promiseProducts.some((prod) => prod.id === id);
-  if (productById) {
-    return res.status(200).json({
-      status: "success",
-      msg: "product found",
-      payload: await productM.getProductById(id),
+productsRouter.delete("/:_id", async (req, res) => {
+  try {
+    const _id = req.params._id;
+    const deleted = await productService.deleteOne(_id);
+    if (deleted?.deletedCount > 0) {
+      return res.status(200).json({
+        status: "success",
+        msg: "user deleted",
+        payload: {},
+      });
+    } else {
+      return res.status(404).json({
+        status: "error",
+        msg: "User not found",
+        payload: {},
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: "error",
+      msg: "something went wrong :(",
+      payload: {},
     });
-  } else {
-    return res
-      .status(404)
-      .json({ status: "error", msg: "product not found", payload: {} });
   }
 });
-
