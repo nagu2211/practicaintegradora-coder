@@ -1,5 +1,6 @@
 import express from "express";
-import productManager from "../components/ProductManager.js";
+import productManager from "../DAO/ProductManager.js";
+
 
 export const productsRouter = express.Router();
 const productM = new productManager();
@@ -11,7 +12,7 @@ productsRouter.get("/", async (req, res) => {
     return res.status(200).json({
       status: "success",
       msg: "all products",
-      data: await allProducts,
+      payload: await allProducts,
     });
   } else {
     let promiseProducts = await allProducts;
@@ -19,7 +20,7 @@ productsRouter.get("/", async (req, res) => {
     return res.status(200).json({
       status: "success",
       msg: `limit of displayed products: ${limit} `,
-      data: productLimit,
+      payload: productLimit,
     });
   }
 });
@@ -38,20 +39,20 @@ productsRouter.post("/", async (req, res) => {
   ) {
     return res
       .status(404)
-      .json({ status: "error", msg: "All fields are required", data: {} });
+      .json({ status: "error", msg: "All fields are required", payload: {} });
   } else if (repeated) {
     return res
       .status(404)
       .json({
         status: "error",
         msg: "Not added: the product is repeated",
-        data: {},
+        payload: {},
       });
   } else {
     await productM.addProduct(newProduct);
     res
       .status(201)
-      .json({ status: "success", msg: "product added", data: newProduct });
+      .json({ status: "success", msg: "product added", payload: newProduct });
   }
 });
 
@@ -66,7 +67,7 @@ productsRouter.put("/:pid", async (req, res) => {
   if (!elemento) {
     return res
       .status(404)
-      .json({ status: "error", msg: "product not found", data: {} });
+      .json({ status: "error", msg: "product not found", payload: {} });
   } else {
     // Actualizar solo las propiedades especificadas
     return res
@@ -74,7 +75,7 @@ productsRouter.put("/:pid", async (req, res) => {
       .json({
         status: "success",
         msg: "product updated",
-        data: await productM.updateProduct(id, updaProd),
+        payload: await productM.updateProduct(id, updaProd),
       });
   }
 });
@@ -87,12 +88,12 @@ productsRouter.delete("/:pid", async (req, res) => {
     return res.status(200).json({
       status: "success",
       msg: "product eliminated",
-      data: await productM.deleteProduct(id),
+      payload: await productM.deleteProduct(id),
     });
   }
   return res
     .status(404)
-    .json({ status: "error", msg: "product not found", data: {} });
+    .json({ status: "error", msg: "product not found", payload: {} });
 });
 
 productsRouter.get("/:pid", async (req, res) => {
@@ -103,12 +104,12 @@ productsRouter.get("/:pid", async (req, res) => {
     return res.status(200).json({
       status: "success",
       msg: "product found",
-      data: await productM.getProductById(id),
+      payload: await productM.getProductById(id),
     });
   } else {
     return res
       .status(404)
-      .json({ status: "error", msg: "product not found", data: {} });
+      .json({ status: "error", msg: "product not found", payload: {} });
   }
 });
 

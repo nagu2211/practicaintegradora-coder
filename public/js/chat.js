@@ -1,16 +1,15 @@
 const socket = io();
 
 const chatBox = document.getElementById("input-msg");
-const vaciarChat = document.getElementById("vaciarChat")
+const vaciarChat = document.getElementById("vaciarChat");
 
-let usuarioIngresado = "";
-
+let emailIngresado = "";
 
 async function main() {
-  const { value: nombre } = await Swal.fire({
-    title: "Enter your name",
+  const { value: email } = await Swal.fire({
+    title: "Enter your email",
     input: "text",
-    inputLabel: "Your name",
+    inputLabel: "Your email",
     inputValue: "",
     showCancelButton: false,
     allowOutsideClick: false,
@@ -20,15 +19,15 @@ async function main() {
       }
     },
   });
-  usuarioIngresado = nombre;
+  emailIngresado = email;
 }
 main();
 
 chatBox.addEventListener("keyup", ({ key }) => {
   if (key == "Enter") {
     socket.emit("msg_front_to_back", {
-      msg: chatBox.value,
-      user: usuarioIngresado,
+      message: chatBox.value,
+      user: emailIngresado,
     });
     chatBox.value = "";
   }
@@ -38,11 +37,11 @@ socket.on("listado_de_msgs", (msgs) => {
   const chatmsg = document.getElementById("div-msgs");
   let formato = "";
   msgs.forEach((msg) => {
-    formato = formato + "<p>User " + msg.user + ": " + msg.msg + "</p>";
+    formato = formato + "<p>Email " + msg.user + ": " + msg.message + "</p>";
   });
   chatmsg.innerHTML = formato;
-  vaciarChat.addEventListener("click", function(){
+  vaciarChat.addEventListener("click", function () {
     chatmsg.innerHTML = "";
     socket.emit("vaciar_chat");
-  })
+  });
 });

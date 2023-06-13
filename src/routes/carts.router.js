@@ -18,9 +18,9 @@ cartsRouter.get("/:cid", async (req, res) => {
   let cid = req.params.cid;
   let cart = await cartM.getCartById(cid);
   if (!cart) {
-    res.status(404).json({ status: "error", msg: "cart not found", data: {} });
+    res.status(404).json({ status: "error", msg: "cart not found", payload: {} });
   } else {
-    res.status(200).json({ status: "success", msg: "cart found", data: cart });
+    res.status(200).json({ status: "success", msg: "cart found", payload: cart });
   }
 });
 
@@ -32,11 +32,11 @@ cartsRouter.post("/:cid/product/:pid", async (req, res) => {
   let readCartProd = await cartM.readCart();
   let findCart = readCartProd.some(cart => cart.idCart == cid)
   if(!findProd){
-    return res.status(404).json({ status: "error", msg: "product not found", data: {} });
+    return res.status(404).json({ status: "error", msg: "product not found", payload: {} });
   } else if (!findCart) {
-    return res.status(404).json({ status: "error", msg: "cart not found", data: {} });
+    return res.status(404).json({ status: "error", msg: "cart not found", payload: {} });
   } else {
-    return res.status(201).json({ status: "success", msg: "product added to cart", data: await cartM.addProductToCart(cid, pid) });
+    return res.status(201).json({ status: "success", msg: "product added to cart", payload: await cartM.addProductToCart(cid, pid) });
   }
 });
 
