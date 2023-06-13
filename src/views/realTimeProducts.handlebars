@@ -1,12 +1,12 @@
 <section class="products">
     <h1>ALL PRODUCTS WITH SOCKET</h1>
     <div class="all-products" id="dinamicProd">
-        {{#each promiseProducts}}
+        {{#each products}}
         <div class="product">
             <img src={{this.thumbnail}} alt="img-product">
             <div class="product-info">
                 <h4 class="product-title">{{this.title}}</h4>
-                <p><span>id <i class="fa-solid fa-arrow-down"></i></span><br>{{this.id}}</p>
+                <p><span>id <i class="fa-solid fa-arrow-down"></i></span><br>{{this._id}}</p>
                 <p><span>description <i class="fa-solid fa-arrow-down"></i></span><br>{{this.description}}</p>
                 <p><span>code <i class="fa-solid fa-arrow-down"></i></span><br>{{this.code}}</p>
                 <p><span>stock <i class="fa-solid fa-arrow-down"></i></span><br>{{this.stock}}k</p>

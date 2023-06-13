@@ -28,11 +28,13 @@ ProdForm.addEventListener("submit", (e)=>{
     socket.emit("new-product", newProd)
 })
 
-prodFormDel.addEventListener("submit", (e)=>{
+prodFormDel.addEventListener("submit", (e) => {
     e.preventDefault();
-    const idProd = inputId.value
-    socket.emit("delete-product", idProd)
-})
+    const idProd = {
+        idProd: inputId.value
+    };
+    socket.emit("delete-product", idProd);
+});
 
 socket.on("products", (promiseProducts) => {
     if (Array.isArray(promiseProducts)) {
@@ -41,7 +43,7 @@ socket.on("products", (promiseProducts) => {
         <img src=${item.thumbnail} alt="img-product">
         <div class="product-info">
             <h4 class="product-title">${item.title}</h4>
-            <p><span>id <i class="fa-solid fa-arrow-down"></i></span><br>${item.id}</p>
+            <p><span>id <i class="fa-solid fa-arrow-down"></i></span><br>${item._id}</p>
             <p><span>description <i class="fa-solid fa-arrow-down"></i></span><br>${item.description}</p>
             <p><span>code <i class="fa-solid fa-arrow-down"></i></span><br>${item.code}</p>
             <p><span>stock <i class="fa-solid fa-arrow-down"></i></span><br>${item.stock}k</p>
