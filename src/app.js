@@ -29,7 +29,7 @@ app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
 app.use("/api/carts/", cartsRouter);
-app.use("/products", viewsRouter);
+app.use("/", viewsRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/chat", chatRouter);

@@ -16,6 +16,22 @@ class ProductService {
     );
     return products;
   }
+  async getAllViews() {
+    const products = await ProdModel.find(
+      {},
+      {
+        title: true,
+        description: true,
+        code: true,
+        price: true,
+        stock: true,
+        category: true,
+        thumbnail: true,
+      }
+    ).lean();
+    return products;
+  }
+  
   async addProduct({
     title,
     description,

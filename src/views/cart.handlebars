@@ -1,0 +1,15 @@
+<section class="products">
+  <h1>ALL PRODUCTS IN THE CART</h1>
+  <div class="all-products">
+    {{#each simplifiedCart}}
+      <div class="product">
+        <img src={{this.thumbnail}} alt="img-product" />
+        <div class="product-info">
+          <h4 class="product-title">{{this.title}}</h4>
+          <p><span>quantity <i class="fa-solid fa-arrow-down"></i></span><br />{{this.quantity}}</p>
+          <p><span>price <i class="fa-solid fa-arrow-down"></i></span><br />${{this.price}}(ARS)/k</p>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</section>

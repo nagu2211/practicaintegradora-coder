@@ -10,10 +10,10 @@ class CartService {
     return newCart;
   }
   async getOneCart(_id) {
-    const getCartById = await CartModel.findOne({ _id }).populate(
+    const cart = await CartModel.findOne({ _id:_id }).populate(
       "products.product"
     );
-    return getCartById;
+    return cart;
   }
   addProductToCart = async (cid, pid) => {
     const cartFound = await CartModel.findById(cid);
