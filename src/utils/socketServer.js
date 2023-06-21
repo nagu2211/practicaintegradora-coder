@@ -19,7 +19,7 @@ export function connectSocketServer(httpServer) {
       try {
         await ProdModel.create(newProd);
         const prods = await ProdModel.find({});
-        socketServer.emit("products", prods);
+        socketServer.emit("products", prods)
       } catch (e) {
         console.log(e);
       }

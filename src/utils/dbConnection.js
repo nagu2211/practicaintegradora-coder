@@ -1,4 +1,6 @@
 import { connect } from "mongoose";
+import { ProdModel } from "../DAO/models/product.model.js";
+
 export async function connectMongo() {
   try {
     await connect(

@@ -53,19 +53,78 @@ class ProductService {
     const productById = await ProdModel.findOne({ _id: _id });
     return productById;
   }
-  async getAllViews() {
-    const products = await ProdModel.find({}, {
-      _id: 1,
-      thumbnail: 1,
-      title: 1,
-      description: 1,
-      code: 1,
-      stock: 1,
-      category: 1,
-      price: 1,
-      status:1
-    }).lean();
-    return products;
+  async getParams(queryParams) {
+    const {
+      limit = 10,
+      page = 1,
+      sort,
+      query,
+      category,
+      disponibility,
+    } = queryParams;
+    let filter = {};
+    let filterError = false;
+
+    if (query != undefined) {
+      switch (query) {
+        case "category":
+          if (category == "fruit") {
+            filter = { category: category };
+          } else if (category == "vegetable") {
+            filter = { category: category };
+          } else {
+            filter = {};
+            filterError = true;
+          }
+          break;
+        case "disponibility":
+          if (disponibility == "true") {
+            filter = { status: true };
+          } else if (disponibility == "false") {
+            filter = { status: false };
+          } else {
+            filter = {};
+            filterError = true;
+          }
+          break;
+        default:
+          filter = {};
+          filterError = true;
+      }
+    }
+
+    const options = {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      sort: sort === "desc" ? "-price" : sort === "asc" ? "price" : undefined,
+    };
+
+    const result = await ProdModel.paginate(filter, options);
+
+    const resp = {
+      status: filterError === true ? "error" : "success",
+      msg:
+        filterError === true
+          ? "without filters"
+          : query
+          ? `filter by ${query}`
+          : "without filters",
+      payload: result.docs,
+      totalPages: result.totalPages,
+      prevPage: result.hasPrevPage ? result.prevPage : null,
+      nextPage: result.hasNextPage ? result.nextPage : null,
+      page: result.page,
+      hasPrevPage: result.hasPrevPage,
+      hasNextPage: result.hasNextPage,
+      prevLink: result.hasPrevPage
+        ? `/api/products?limit=${limit}&page=${result.prevPage}`
+        : null,
+      nextLink: result.hasNextPage
+        ? `/api/products?limit=${limit}&page=${result.nextPage}`
+        : null,
+    };
+
+    return resp;
   }
 }
 
