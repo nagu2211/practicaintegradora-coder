@@ -53,6 +53,10 @@ class ProductService {
     const productById = await ProdModel.findOne({ _id: _id });
     return productById;
   }
+  async getProductByIdView(_id) {
+    const productById = await ProdModel.findOne({ _id: _id }).lean();
+    return productById;
+  }  
   async getParams(queryParams) {
     const {
       limit = 10,

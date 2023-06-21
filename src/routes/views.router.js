@@ -9,7 +9,7 @@ viewsRouter.get("/", async (req, res) => {
     const { querypage } = req.query;
     const queryResult = await ProdModel.paginate(
       {},
-      { limit:5, page: querypage || 1 }
+      { limit: 5, page: querypage || 1 }
     );
     let prodsPaginated = queryResult.docs;
     prodsPaginated = prodsPaginated.map((prod) => {
@@ -47,6 +47,24 @@ viewsRouter.get("/", async (req, res) => {
       hasNextPage,
       prevPage,
       nextPage,
+    });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({
+      status: "error",
+      msg: "something went wrong :(",
+      payload: {},
+    });
+  }
+});
+
+viewsRouter.get("/:pid", async (req, res) => {
+  try {
+    const { pid } = req.params;
+    let product = await productService.getProductByIdView(pid);
+    let prodView = [product]; 
+    return res.status(200).render("details", {
+      prodView,
     });
   } catch (e) {
     console.log(e);

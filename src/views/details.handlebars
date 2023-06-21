@@ -1,0 +1,20 @@
+<section class="products">
+  <h1>ALL PRODUCTS</h1>
+  <div class="all-products">
+    <div class="product">
+      <img src={{prodView.[0].thumbnail}} alt="img-product" />
+      <div class="product-info">
+        <h4 class="product-title">{{prodView.[0].title}}</h4>
+        <p><span>id <i class="fa-solid fa-arrow-down"></i></span><br />{{prodView.[0]._id}}</p>
+        <p><span>description <i class="fa-solid fa-arrow-down"></i></span><br />{{prodView.[0].description}}</p>
+        <p><span>code <i class="fa-solid fa-arrow-down"></i></span><br />{{prodView.[0].code}}</p>
+        <p><span>stock <i class="fa-solid fa-arrow-down"></i></span><br />{{prodView.[0].stock}}k</p>
+        <p><span>category <i class="fa-solid fa-arrow-down"></i></span><br />{{prodView.[0].category}}</p>
+        <p><span>price <i class="fa-solid fa-arrow-down"></i></span><br />${{prodView.[0].price}}(ARS)/k</p>
+        <p><span>status <i class="fa-solid fa-arrow-down"></i></span><br />{{prodView.[0].status}}</p>
+        <button onclick="putIntoCart('{{prodView.[0]._id}}')">Add Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+<script src="/js/index.js"></script>
