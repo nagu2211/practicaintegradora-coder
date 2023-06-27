@@ -1,11 +1,10 @@
 import express from "express";
 import { productService } from "../services/product.service.js";
-import { cartService } from "../services/cart.service.js";
 import { ProdModel } from "../DAO/models/product.model.js";
 
-export const viewsRouter = express.Router();
+export const viewProductsRouter = express.Router();
 
-viewsRouter.get("/products", async (req, res) => {
+viewProductsRouter.get("/", async (req, res) => {
   try {
     const { querypage } = req.query;
     const queryResult = await ProdModel.paginate(
@@ -59,7 +58,7 @@ viewsRouter.get("/products", async (req, res) => {
   }
 });
 
-viewsRouter.get("/products/:pid", async (req, res) => {
+viewProductsRouter.get("/:pid", async (req, res) => {
   try {
     const { pid } = req.params;
     let product = await productService.getProductByIdView(pid);
@@ -77,7 +76,7 @@ viewsRouter.get("/products/:pid", async (req, res) => {
   }
 });
 
-viewsRouter.get("/realtimeproducts", async (req, res) => {
+viewProductsRouter.get("/realtimeproducts", async (req, res) => {
   try {
     let products = await productService.getAllViews();
     return res.status(200).render("realTimeProducts", { products });
@@ -91,25 +90,4 @@ viewsRouter.get("/realtimeproducts", async (req, res) => {
   }
 });
 
-viewsRouter.get("/cart/:cid", async (req, res) => {
-  try {
-    const { cid } = req.params;
-    const cart = await cartService.getOneCart(cid);
-    const simplifiedCart = cart.products.map(item=>{
-      return{
-        thumbnail: item.product.thumbnail,
-        title: item.product.title,
-        price: item.product.price,
-        quantity: item.quantity,
-      }
-    })
-    return res.status(200).render("cart", { simplifiedCart });
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
-  }
-});
+
