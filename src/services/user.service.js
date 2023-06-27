@@ -8,9 +8,20 @@ class UserService {
     );
     return users;
   }
-  async create({ firstName, lastName, email }) {
-    const userCreated = await UserModel.create({ firstName, lastName, email });
+  async create({ userName, email, password, rol }) {
+    const userCreated = await UserModel.create({ userName, email, password, rol:rol });
     return userCreated;
+  }
+  async findUserByEmail(email) {
+    const found = await UserModel.findOne({ email: email });
+    return found || false;
+  }
+  async login({ userName, password }) {
+    const found = await UserModel.findOne({
+      userName: userName,
+      password: password,
+    });
+    return found || false;
   }
   async updateOne({ _id, firstName, lastName, email }) {
     const userUpdated = await UserModel.updateOne(
@@ -25,9 +36,9 @@ class UserService {
     );
     return userUpdated;
   }
-  async deleteOne(_id){
+  async deleteOne(_id) {
     const deleted = await UserModel.deleteOne({ _id: _id });
-    return deleted
+    return deleted;
   }
 }
 

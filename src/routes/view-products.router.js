@@ -1,10 +1,11 @@
 import express from "express";
 import { productService } from "../services/product.service.js";
 import { ProdModel } from "../DAO/models/product.model.js";
+import checkLogin from "../utils/checkLogin.js"
 
 export const viewProductsRouter = express.Router();
 
-viewProductsRouter.get("/", async (req, res) => {
+viewProductsRouter.get("/",checkLogin, async (req, res) => {
   try {
     const { querypage } = req.query;
     const queryResult = await ProdModel.paginate(
@@ -25,6 +26,8 @@ viewProductsRouter.get("/", async (req, res) => {
         status: prod.status,
       };
     });
+    const userNameSession = req.session.userName;
+		const rolSession = req.session.rol;
     const {
       totalDocs,
       limit,
@@ -36,7 +39,9 @@ viewProductsRouter.get("/", async (req, res) => {
       prevPage,
       nextPage,
     } = queryResult;
-    return res.status(200).render("home", {
+    return res.status(200).render("products", {
+      userNameSession,
+      rolSession,
       prodsPaginated,
       totalDocs,
       limit,

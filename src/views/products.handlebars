@@ -1,0 +1,38 @@
+<section class="products">
+  {{#if userNameSession}}
+
+    <h4>Hola, {{userNameSession}}. Tu rol es {{rolSession}}</h4>
+  <a href="/api/sessions/logout" ><button>LogOut</button></a>
+  {{/if}}
+  <h1>ALL PRODUCTS</h1>
+
+  <div class="all-products">
+    {{#each prodsPaginated}}
+      <div class="product">
+        <img src={{this.thumbnail}} alt="img-product" />
+        <div class="product-info">
+          <h4 class="product-title">{{this.title}}</h4>
+          <p><span>price <i class="fa-solid fa-arrow-down"></i></span><br
+            />${{this.price}}(ARS)/k</p>
+          <a href="/products/{{this._id}}"><button>Details</button></a>
+          <button onclick="putIntoCart('{{this._id}}')">Add to Cart</button>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+  <h3>pagination</h3>
+  <div>
+    {{#if hasPrevPage}}
+      <a href="/products?querypage={{prevPage}}&limit={{limit}}">⬅️</a>
+    {{/if}}
+    page
+    {{page}}
+    of
+    {{totalPages}}
+    {{#if hasNextPage}}
+      <a href="/products?querypage={{nextPage}}&limit={{limit}}">➡️</a>
+    {{/if}}
+
+  </div>
+</section>
+<script src="/js/index.js"></script>

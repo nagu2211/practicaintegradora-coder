@@ -1,9 +1,9 @@
 import express from "express";
 
 
-export const chatRouter = express.Router();
+export const chatsRouter = express.Router();
 
 
-chatRouter.get("/", async (_, res) => {
+chatsRouter.get("/", async (_, res) => {
     return res.status(200).render("chat", {});
 });
