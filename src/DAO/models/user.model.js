@@ -1,8 +1,10 @@
 import { Schema, model } from "mongoose";
 
 const schema = new Schema({
-  userName: { type: String, required: true, max: 100 },
-  email: { type: String, required: true, max: 100 },
+  firstName: { type: String, required: true, max: 100 },
+  lastName: { type: String, required: true, max: 100 },
+  age: { type: Number, required: true },
+  email: { type: String, required: true, max: 100},
   password: { type: String, required: true, max: 100 },
   rol: { type: String, default: "user", required: false, max: 100 },
 });

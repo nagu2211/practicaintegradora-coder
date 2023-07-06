@@ -26,9 +26,9 @@ viewProductsRouter.get("/", checkLogin, async (req, res) => {
         status: prod.status,
       };
     });
-    const emailSession = req.session.email;
-    const rolSession = req.session.rol;
-    const userNameSession = req.session.userName;
+    const emailSession = req.session.user.email;
+    const rolSession = req.session.user.rol;
+    const firstNameSession = req.session.user.firstName;
     const {
       totalDocs,
       limit,
@@ -41,7 +41,7 @@ viewProductsRouter.get("/", checkLogin, async (req, res) => {
       nextPage,
     } = queryResult;
     return res.status(200).render("products", {
-      userNameSession,
+      firstNameSession,
       emailSession,
       rolSession,
       prodsPaginated,

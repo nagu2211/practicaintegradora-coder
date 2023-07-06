@@ -11,6 +11,8 @@ import { viewUsersRouter } from "./routes/view-users.router.js";
 import { viewCartsRouter } from "./routes/view-carts.router.js";
 import { sessionsRouter } from "./routes/sessions.router.js";
 import { cartsRouter } from "./routes/carts.router.js";
+import { iniPassport } from "./utils/passport.config.js";
+import passport from 'passport';
 import session from 'express-session';
 
 const PORT = 8080;
@@ -25,6 +27,11 @@ const httpServer = app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 connectSocketServer(httpServer);
+
+iniPassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //Config del motor de plantillas
 app.engine("handlebars", handlebars.engine());

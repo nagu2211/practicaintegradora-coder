@@ -8,8 +8,8 @@ class UserService {
     );
     return users;
   }
-  async create({ userName, email, password, rol }) {
-    const userCreated = await UserModel.create({ userName, email, password, rol:rol });
+  async create({ firstName,lastName,age, email, password, rol }) {
+    const userCreated = await UserModel.create({ firstName, lastName , age , email, password, rol:rol });
     return userCreated;
   }
   async findUserByEmail(email) {
@@ -19,7 +19,7 @@ class UserService {
   async login({ email }) {
     const found = await UserModel.findOne({
       email: email,
-    }, {userName: true, email: true, password:true,rol:true});
+    }, {firstName: true, email: true, password:true,rol:true});
     return found || false;
   }
   async updateOne({ _id, firstName, lastName, email }) {

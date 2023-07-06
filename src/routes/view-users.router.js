@@ -28,3 +28,10 @@ viewUsersRouter.get('/logout', (req, res) => {
       res.redirect("/")
     })
 })
+
+viewUsersRouter.get('/fail-register', (_, res) => {
+  return res.status(401).render("error-page",{msg:"failure to register the user"});
+})
+viewUsersRouter.get('/fail-login', (_, res) => {
+  return res.status(401).render("error-page",{msg:"user not found"});
+})
