@@ -1,6 +1,7 @@
 <h1>login</h1>
-<form method="post">
-  <input type="text" name="userName" placeholder="user" />
+<form action="/api/sessions/login" method="post">
+  <input type="email" name="email" placeholder="email" />
   <input type="password" name="password" placeholder="password" />
   <button type="submit" class="btnAdd">login</button>
+  <a href="/register">dont have an account? Register</a>
 </form>

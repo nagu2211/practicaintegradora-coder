@@ -1,8 +1,8 @@
 <section class="products">
-  {{#if userNameSession}}
+  {{#if emailSession}}
 
-    <h4>Hola, {{userNameSession}}. Tu rol es {{rolSession}}</h4>
-  <a href="/api/sessions/logout" ><button>LogOut</button></a>
+    <h4>Hello, {{userNameSession}}. Your role is {{rolSession}}</h4>
+    <a href="/logout"><button>LogOut</button></a>
   {{/if}}
   <h1>ALL PRODUCTS</h1>
 

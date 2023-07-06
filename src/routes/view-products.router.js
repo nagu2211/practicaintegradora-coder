@@ -1,11 +1,11 @@
 import express from "express";
 import { productService } from "../services/product.service.js";
 import { ProdModel } from "../DAO/models/product.model.js";
-import checkLogin from "../utils/checkLogin.js"
+import { checkLogin } from "../utils/auth.js";
 
 export const viewProductsRouter = express.Router();
 
-viewProductsRouter.get("/",checkLogin, async (req, res) => {
+viewProductsRouter.get("/", checkLogin, async (req, res) => {
   try {
     const { querypage } = req.query;
     const queryResult = await ProdModel.paginate(
@@ -26,8 +26,9 @@ viewProductsRouter.get("/",checkLogin, async (req, res) => {
         status: prod.status,
       };
     });
+    const emailSession = req.session.email;
+    const rolSession = req.session.rol;
     const userNameSession = req.session.userName;
-		const rolSession = req.session.rol;
     const {
       totalDocs,
       limit,
@@ -41,6 +42,7 @@ viewProductsRouter.get("/",checkLogin, async (req, res) => {
     } = queryResult;
     return res.status(200).render("products", {
       userNameSession,
+      emailSession,
       rolSession,
       prodsPaginated,
       totalDocs,
@@ -55,11 +57,9 @@ viewProductsRouter.get("/",checkLogin, async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
+    return res
+      .status(500)
+      .render("error-page", { msg: "unexpected error on the server" });
   }
 });
 
@@ -73,11 +73,9 @@ viewProductsRouter.get("/:pid", async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
+    return res
+      .status(500)
+      .render("error-page", { msg: "unexpected error on the server" });
   }
 });
 
@@ -87,12 +85,8 @@ viewProductsRouter.get("/realtimeproducts", async (req, res) => {
     return res.status(200).render("realTimeProducts", { products });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
+    return res
+      .status(500)
+      .render("error-page", { msg: "unexpected error on the server" });
   }
 });
-
-

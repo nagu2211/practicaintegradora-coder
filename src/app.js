@@ -7,9 +7,9 @@ import { connectMongo } from "./utils/dbConnection.js";
 import { connectSocketServer } from "./utils/socketServer.js";
 import { productsRouter } from "./routes/products.router.js";
 import { viewProductsRouter } from "./routes/view-products.router.js";
+import { viewUsersRouter } from "./routes/view-users.router.js";
 import { viewCartsRouter } from "./routes/view-carts.router.js";
 import { sessionsRouter } from "./routes/sessions.router.js";
-import { HomeRouter } from "./routes/home.router.js";
 import { cartsRouter } from "./routes/carts.router.js";
 import session from 'express-session';
 
@@ -32,11 +32,12 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
-app.use("/", HomeRouter);
 app.use("/api/carts/", cartsRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/sessions", sessionsRouter);
+
+app.use("/", viewUsersRouter);
 app.use("/products", viewProductsRouter);
 app.use("/carts", viewCartsRouter);
 app.use("/chat", chatsRouter);

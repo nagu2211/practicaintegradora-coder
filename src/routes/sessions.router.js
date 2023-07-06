@@ -2,50 +2,21 @@ import express from "express";
 import { userService } from "../services/user.service.js";
 export const sessionsRouter = express.Router();
 
-sessionsRouter.get("/login", async (req, res) => {
-  try {
-    return res.status(200).render("login");
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
-  }
-});
-
 sessionsRouter.post("/login", async (req, res) => {
   try {
-    const { userName, password } = req.body;
-    const findUser = await userService.login({ userName, password });
+    const { email, password } = req.body;
+    const findUser = await userService.login({ email, password });
     if (findUser) {
-      req.session.userName = findUser.userName;
+      req.session.email = findUser.email;
       req.session.rol = findUser.rol;
+      req.session.userName = findUser.userName
       return res.redirect("/products");
     } else {
-      res.send("usuario no encontrado");
+      res.status(404).render("error-page",{msg:"the user does not exist"});
     }
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
-  }
-});
-
-sessionsRouter.get("/register", async (req, res) => {
-  try {
-    return res.status(200).render("register");
-  } catch (e) {
-    console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
+    return res.status(500).render("error-page",{msg:"unexpected error on the server"});
   }
 });
 
@@ -54,7 +25,7 @@ sessionsRouter.post("/register", async (req, res) => {
     const { userName, email, password } = req.body;
     const existingUser = await userService.findUserByEmail(email);
     if (existingUser) {
-      res.send("the user already exists");
+      res.status(401).render("error-page",{msg:"user already exist"});
     } else if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
         await userService.create({
             rol: "admin",
@@ -62,31 +33,18 @@ sessionsRouter.post("/register", async (req, res) => {
             email,
             password,
           });
-          res.redirect("/api/sessions/login");
+          res.redirect("/");
       } else {
       await userService.create({
         userName,
         email,
         password,
       });
-      res.redirect("/api/sessions/login");
+      res.redirect("/");
     }
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
+    return res.status(500).render("error-page",{msg:"unexpected error on the server"});
   }
 });
-
-sessionsRouter.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-      if (err) {
-        return res.json({ status: 'Logout ERROR', body: err })
-      }
-      res.redirect("/api/sessions/login")
-    })
-   })
    

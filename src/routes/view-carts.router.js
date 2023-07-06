@@ -18,10 +18,6 @@ viewCartsRouter.get("/:cid", async (req, res) => {
     return res.status(200).render("cart", { simplifiedCart });
   } catch (e) {
     console.log(e);
-    return res.status(500).json({
-      status: "error",
-      msg: "something went wrong :(",
-      payload: {},
-    });
+    return res.status(500).render("error-page",{msg:"unexpected error on the server"});
   }
 });
