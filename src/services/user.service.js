@@ -16,10 +16,9 @@ class UserService {
     const found = await UserModel.findOne({ email: email });
     return found || false;
   }
-  async login({ email, password }) {
+  async login({ email }) {
     const found = await UserModel.findOne({
       email: email,
-      password: password
     }, {userName: true, email: true, password:true,rol:true});
     return found || false;
   }

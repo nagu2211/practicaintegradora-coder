@@ -1,12 +1,13 @@
 import express from "express";
 import { userService } from "../services/user.service.js";
+import { createHash, isValidPassword } from "../utils/bcrypt.js";
 export const sessionsRouter = express.Router();
 
 sessionsRouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const findUser = await userService.login({ email, password });
-    if (findUser) {
+    const findUser = await userService.login({ email });
+    if (findUser && isValidPassword(password,findUser.password)) {
       req.session.email = findUser.email;
       req.session.rol = findUser.rol;
       req.session.userName = findUser.userName
@@ -31,14 +32,14 @@ sessionsRouter.post("/register", async (req, res) => {
             rol: "admin",
             userName,
             email,
-            password,
+            password:createHash(password),
           });
           res.redirect("/");
       } else {
       await userService.create({
         userName,
         email,
-        password,
+        password:createHash(password),
       });
       res.redirect("/");
     }
