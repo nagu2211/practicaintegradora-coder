@@ -36,3 +36,11 @@ sessionsRouter.post("/register",passport.authenticate("register",{ failureRedire
       .render("error-page", { msg: "unexpected error on the server" });
   }
 });
+
+sessionsRouter.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+
+sessionsRouter.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/' }), (req, res) => {
+  req.session.user = req.user;
+  // Successful authentication, redirect home.
+  res.redirect('/products');
+});
