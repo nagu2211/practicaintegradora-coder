@@ -8,8 +8,8 @@ class UserService {
     );
     return users;
   }
-  async create({ firstName,lastName,age, email, password, rol }) {
-    const userCreated = await UserModel.create({ firstName, lastName , age , email, password, rol:rol });
+  async create({ firstName,lastName,age, email, password, role }) {
+    const userCreated = await UserModel.create({ firstName, lastName , age , email, password, role:role, cart: '' });
     return userCreated;
   }
   async findUserByEmail(email) {

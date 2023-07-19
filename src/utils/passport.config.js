@@ -53,11 +53,12 @@ export function iniPassport() {
             firstName,
             lastName,
             age,
+            cart:'',
             password: createHash(password),
           };
           const newAdmin = {
             ...newUser,
-            rol: "admin",
+            role: "admin",
           };
           if (
             email === "adminCoder@coder.com" &&
