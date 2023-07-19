@@ -6,7 +6,7 @@ const schema = new Schema({
   age: { type: Number, required: false },
   email: { type: String, required: true, max: 100 },
   password: { type: String, required: true, max: 100 },
-  cart: { type: String, required: false },
+  cart: { type: String, required: false, unique: true },
   role: { type: String, default: "user", required: true },
 });
 

@@ -10,19 +10,19 @@ class CartService {
     return newCart;
   }
   async getOneCart(_id) {
-    const cart = await CartModel.findOne({ _id:_id }).populate(
+    const cart = await CartModel.findOne({ _id: _id }).populate(
       "products.product"
     );
     return cart;
   }
   addProductToCart = async (cid, pid) => {
     const cartFound = await CartModel.findById(cid);
-  
+
     if (cartFound) {
       const productFound = cartFound.products.find(
         (product) => product.product.toString() === pid
       );
-      if (productFound){
+      if (productFound) {
         productFound.quantity++;
       } else {
         cartFound.products.push({ product: pid, quantity: 1 });
@@ -30,11 +30,13 @@ class CartService {
       await cartFound.save();
       return cartFound;
     } else {
-      const newCart = await CartModel.create({ _id: cid, products: [{ product: pid, quantity: 1 }] });
+      const newCart = await CartModel.create({
+        _id: cid,
+        products: [{ product: pid, quantity: 1 }],
+      });
       return newCart;
     }
   };
-  
 
   async removeProduct(cid, pid) {
     try {

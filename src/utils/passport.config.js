@@ -2,6 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import { UserModel } from "../DAO/models/user.model.js";
+import { cartService } from "../services/cart.service.js";
 import fetch from "node-fetch";
 import GitHubStrategy from "passport-github2";
 
@@ -68,6 +69,11 @@ export function iniPassport() {
             return done(null, adminCreated);
           } else {
             let userCreated = await UserModel.create(newUser);
+            const cartNew = await cartService.newCart();
+            const cartId = cartNew.toObject();
+            const cartStringId = cartId._id.toString();
+            userCreated.cart = cartStringId;
+            await userCreated.save()
             return done(null, userCreated);
           }
         } catch (e) {
