@@ -15,7 +15,7 @@
           <p><span>price <i class="fa-solid fa-arrow-down"></i></span><br
             />${{this.price}}(ARS)/k</p>
           <a href="/products/{{this._id}}"><button>Details</button></a>
-          <button onclick="putIntoCart('{{this._id}}')">Add to Cart</button>
+          <button onclick="main('{{this._id}}')">Add to Cart</button>
         </div>
       </div>
     {{/each}}
@@ -35,4 +35,5 @@
 
   </div>
 </section>
+{{!-- <script src="/js/cart.js"></script> --}}
 <script src="/js/index.js"></script>

@@ -8,6 +8,7 @@ import GitHubStrategy from "passport-github2";
 
 const LocalStrategy = local.Strategy;
 
+
 export function iniPassport() {
   passport.use(
     "login",
@@ -69,11 +70,11 @@ export function iniPassport() {
             return done(null, adminCreated);
           } else {
             let userCreated = await UserModel.create(newUser);
-            const cartNew = await cartService.newCart();
-            const cartId = cartNew.toObject();
-            const cartStringId = cartId._id.toString();
-            userCreated.cart = cartStringId;
-            await userCreated.save()
+             const cartNew = await cartService.newCart();
+             const cartId = cartNew.toObject();
+             const cartStringId = cartId._id.toString();
+             userCreated.cart = cartStringId;
+             await userCreated.save()
             return done(null, userCreated);
           }
         } catch (e) {

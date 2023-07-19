@@ -1,53 +1,52 @@
-let carritoId = localStorage.getItem("carrito-id");
-const API_URL = "http://localhost:8080/api";
-function putIntoCart(_id) {
-  carritoId = localStorage.getItem("carrito-id");
-  const url = API_URL + "/carts/" + carritoId + "/product/" + _id; 
-  const data = {};
-
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  };
-
-  fetch(url, options)
-    .then((response) => response.json())
-    .then(() => {
-      alert("agregado!!!")
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert(JSON.stringify(error));
+async function getCurrentSession() {
+  try {
+    const response = await fetch('/api/sessions/current', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch current session');
+    }
+
+    const sessionData = await response.json();
+    const cartUser = sessionData?.user?.cart;
+
+    return cartUser;
+  } catch (error) {
+    console.error('Error fetching current session:', error);
+  }
+}
+async function main(productId) {
+  try {
+    const cartId = await getCurrentSession();
+    
+      const products = { products: { product: productId } };
+      fetch(`/api/carts/${cartId}/product/${productId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(products),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Product added to cart:', data);
+        })
+        .catch(error => {
+          console.error('error when adding product to cart:', error);
+        });
+    
+  } catch (error) {
+    console.error('Error in main:', error);
+  }
 }
 
-if (!carritoId) {
-  const url = API_URL + "/carts";
 
-  const data = {};
 
-  const options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  };
 
-  fetch(url, options)
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Response:", data);
-      const carritoId = localStorage.setItem("carrito-id", data.payload._id);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert(JSON.stringify(error));
-    });
-}
 
 const socket = io();
 

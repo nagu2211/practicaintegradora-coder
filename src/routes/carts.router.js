@@ -1,6 +1,5 @@
 import express from "express";
 import { cartService } from "../services/cart.service.js";
-import { productService } from "../services/product.service.js";
 
 export const cartsRouter = express.Router();
 
@@ -120,12 +119,8 @@ cartsRouter.put("/:cid", async (req, res) => {
 cartsRouter.put("/:cid/product/:pid", async (req, res) => {
   try {
     const { cid, pid } = req.params;
-    const { quantity } = req.body;
-    const cart = await cartService.updateProdQuantity(cid, pid, quantity);
-
-    return res
-      .status(200)
-      .json({ status: "succes", message: "product quantity updated", cart });
+    const cart = await cartService.addProductToCart(cid, pid);
+    res.status(201).json(cart);
   } catch (e) {
     console.log(e);
     return res.status(500).json({
