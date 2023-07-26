@@ -12,12 +12,13 @@ import { viewCartsRouter } from "./routes/view-carts.router.js";
 import { sessionsRouter } from "./routes/sessions.router.js";
 import { cartsRouter } from "./routes/carts.router.js";
 import { iniPassport } from "./utils/passport.config.js";
-import passport from 'passport';
-import session from 'express-session';
+import passport from "passport";
+import session from "express-session";
 import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
+import env from "./config/environment.config.js";
 
-const PORT = 8080;
+const PORT = env.port;
 const app = express();
 
 connectMongo();
@@ -26,21 +27,27 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());
-app.use(session({ store:MongoStore.create({
-  mongoUrl:"mongodb+srv://SantiagoEspindola:lBpogkidGlw6KEbE@cluster0.4rgowyj.mongodb.net/ecommerce",
-  mongoOptions:{useNewUrlParser:true,useUnifiedTopology:true},
-  ttl:15,
-}), secret: 'un-re-secreto', resave: true, saveUninitialized: true }));
+app.use(
+  session({
+    store: MongoStore.create({
+      mongoUrl: env.mongoUrl,
+      mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+      ttl: 15,
+    }),
+    secret: "un-re-secreto",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 
 const httpServer = app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`);
+  console.log(`Example app listening on port http://localhost:${PORT}/`);
 });
 connectSocketServer(httpServer);
 
 iniPassport();
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 //Config del motor de plantillas
 app.engine("handlebars", handlebars.engine());

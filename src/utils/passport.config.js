@@ -5,6 +5,7 @@ import { UserModel } from "../DAO/models/user.model.js";
 import { cartService } from "../services/cart.service.js";
 import fetch from "node-fetch";
 import GitHubStrategy from "passport-github2";
+import env from "../config/environment.config.js"
 
 const LocalStrategy = local.Strategy;
 
@@ -63,10 +64,15 @@ export function iniPassport() {
             role: "admin",
           };
           if (
-            email === "adminCoder@coder.com" &&
-            password === "adminCod3r123"
+            email === env.adminName &&
+            password === env.adminPassword
           ) {
             let adminCreated = await UserModel.create(newAdmin);
+            const cartNew = await cartService.newCart();
+             const cartId = cartNew.toObject();
+             const cartStringId = cartId._id.toString();
+             adminCreated.cart = cartStringId;
+             await adminCreated.save()
             return done(null, adminCreated);
           } else {
             let userCreated = await UserModel.create(newUser);
@@ -118,8 +124,14 @@ export function iniPassport() {
               lastName: "_",
               email: profile.email,
               password: "_",
+              cart:''
             };
             let userCreated = await UserModel.create(newUser);
+            const cartNew = await cartService.newCart();
+            const cartId = cartNew.toObject();
+            const cartStringId = cartId._id.toString();
+            userCreated.cart = cartStringId;
+            await userCreated.save()
             console.log("User Registration succesful");
             return done(null, userCreated);
           } else {
