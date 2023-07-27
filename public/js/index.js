@@ -13,7 +13,6 @@ async function getCurrentSession() {
 
     const sessionData = await response.json();
     const cartUser = sessionData?.user?.cart;
-
     return cartUser;
   } catch (error) {
     console.error('Error fetching current session:', error);
@@ -22,7 +21,6 @@ async function getCurrentSession() {
 async function main(productId) {
   try {
     const cartId = await getCurrentSession();
-    
       const products = { products: { product: productId } };
       fetch(`/api/carts/${cartId}/product/${productId}`, {
         method: 'PUT',
@@ -44,6 +42,7 @@ async function main(productId) {
   }
 }
 
+/*
 
 
 
@@ -113,3 +112,4 @@ socket.on("products", (promiseProducts) => {
 socket.on("msg_back_front", (msg) => {
   console.log(msg);
 });
+ */
