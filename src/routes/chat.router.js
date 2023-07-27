@@ -1,9 +1,8 @@
 import express from "express";
+import { chatController } from "../controllers/chat.controller.js";
 
 
 export const chatsRouter = express.Router();
 
 
-chatsRouter.get("/", async (_, res) => {
-    return res.status(200).render("chat", {});
-});
+chatsRouter.get("/", chatController.getChat);

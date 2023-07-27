@@ -2,7 +2,6 @@ import express from "express";
 import handlebars from "express-handlebars";
 import { __dirname } from "./config.js";
 import { chatsRouter } from "./routes/chat.router.js";
-import { usersRouter } from "./routes/users.router.js";
 import { connectMongo } from "./utils/dbConnection.js";
 import { connectSocketServer } from "./utils/socketServer.js";
 import { productsRouter } from "./routes/products.router.js";
@@ -57,7 +56,6 @@ app.use(express.static("public"));
 
 app.use("/api/carts/", cartsRouter);
 app.use("/api/products/", productsRouter);
-app.use("/api/users", usersRouter);
 app.use("/api/sessions", sessionsRouter);
 
 app.use("/", viewUsersRouter);

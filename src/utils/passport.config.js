@@ -61,10 +61,10 @@ export function iniPassport() {
           };
           const newAdmin = {
             ...newUser,
-            role: "admin",
+            role: "superadmin",
           };
           if (
-            email === env.adminName &&
+            email === env.adminEmail &&
             password === env.adminPassword
           ) {
             let adminCreated = await UserModel.create(newAdmin);

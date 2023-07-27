@@ -1,18 +1,38 @@
 <section class="products">
+  {{#if emailSession}}
+
+    <h4>Hello, {{firstNameSession}}. Your role is {{roleSession}}</h4>
+    <a href="/logout"><button>LogOut</button></a>
+  {{/if}}
   <h1>ALL PRODUCTS</h1>
+
   <div class="all-products">
-    {{#each products}}
+    {{#each productsView.prodsPaginated}}
       <div class="product">
         <img src={{this.thumbnail}} alt="img-product" />
         <div class="product-info">
           <h4 class="product-title">{{this.title}}</h4>
           <p><span>price <i class="fa-solid fa-arrow-down"></i></span><br
             />${{this.price}}(ARS)/k</p>
-            <a href="/products/{{this._id}}"><button>Details</button></a> 
-            <button onclick="putIntoCart('{{this._id}}')">Add to Cart</button>
+          <a href="/products/{{this._id}}"><button>Details</button></a>
+          <button onclick="main('{{this._id}}')">Add to Cart</button>
         </div>
       </div>
     {{/each}}
+  </div>
+  <h3>pagination</h3>
+  <div>
+    {{#if productsView.hasPrevPage}}
+      <a href="/products?querypage={{productsView.prevPage}}&limit={{productsView.limit}}">⬅️</a>
+    {{/if}}
+    page
+    {{productsView.page}}
+    of
+    {{productsView.totalPages}}
+    {{#if productsView.hasNextPage}}
+      <a href="/products?querypage={{productsView.nextPage}}&limit={{productsView.limit}}">➡️</a>
+    {{/if}}
+
   </div>
 </section>
 <h3 class="titleForm"><i class="fa-solid fa-arrow-down"></i> PRODUCT MANAGER LIVE <i class="fa-solid fa-arrow-down"></i></h3>

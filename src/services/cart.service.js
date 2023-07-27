@@ -13,7 +13,15 @@ class CartService {
     const cart = await CartModel.findOne({ _id: _id }).populate(
       "products.product"
     );
-    return cart;
+    const simplifiedCart = cart.products.map((item) => {
+      return {
+        thumbnail: item.product.thumbnail,
+        title: item.product.title,
+        price: item.product.price,
+        quantity: item.quantity,
+      };
+    });
+    return simplifiedCart ;
   }
   addProductToCart = async (cid, pid) => {
     const cartFound = await CartModel.findById(cid);

@@ -1,37 +1,13 @@
 import express from "express";
+import { viewUsersController } from "../controllers/view-users.controller.js";
 export const viewUsersRouter = express.Router();
 
-viewUsersRouter.get("/", async (_, res) => {
-  try {
-    return res.status(200).render("login");
-  } catch (e) {
-    console.log(e);
-    return res.status(500).render("error-page",{msg:"unexpected error on the server"});
-  }
-});
+viewUsersRouter.get("/", viewUsersController.login);
 
-viewUsersRouter.get("/register", async (_, res) => {
-  try {
-    return res.status(200).render("register");
-  } catch (e) {
-    console.log(e);
-    return res.status(500).render("error-page",{msg:"unexpected error on the server"});
-  }
-});
+viewUsersRouter.get("/register", viewUsersController.register);
 
-viewUsersRouter.get('/logout', (req, res) => {
-    req.session.destroy(err => {
-      if (err) {
-        console.log(err)
-        return res.status(401).render("error-page",{msg:"logout error"});
-      }
-      res.redirect("/")
-    })
-})
+viewUsersRouter.get("/logout", viewUsersController.logout);
 
-viewUsersRouter.get('/fail-register', (_, res) => {
-  return res.status(401).render("error-page",{msg:"failure to register the user"});
-})
-viewUsersRouter.get('/fail-login', (_, res) => {
-  return res.status(401).render("error-page",{msg:"user not found"});
-})
+viewUsersRouter.get("/fail-register", viewUsersController.failRegister);
+
+viewUsersRouter.get("/fail-login", viewUsersController.failLogin);

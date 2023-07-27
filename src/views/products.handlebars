@@ -7,7 +7,7 @@
   <h1>ALL PRODUCTS</h1>
 
   <div class="all-products">
-    {{#each prodsPaginated}}
+    {{#each productsView.prodsPaginated}}
       <div class="product">
         <img src={{this.thumbnail}} alt="img-product" />
         <div class="product-info">
@@ -22,15 +22,15 @@
   </div>
   <h3>pagination</h3>
   <div>
-    {{#if hasPrevPage}}
-      <a href="/products?querypage={{prevPage}}&limit={{limit}}">⬅️</a>
+    {{#if productsView.hasPrevPage}}
+      <a href="/products?querypage={{productsView.prevPage}}&limit={{productsView.limit}}">⬅️</a>
     {{/if}}
     page
-    {{page}}
+    {{productsView.page}}
     of
-    {{totalPages}}
-    {{#if hasNextPage}}
-      <a href="/products?querypage={{nextPage}}&limit={{limit}}">➡️</a>
+    {{productsView.totalPages}}
+    {{#if productsView.hasNextPage}}
+      <a href="/products?querypage={{productsView.nextPage}}&limit={{productsView.limit}}">➡️</a>
     {{/if}}
 
   </div>

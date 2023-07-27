@@ -16,22 +16,54 @@ class ProductService {
     );
     return products;
   }
-  async getAllViews() {
-    const products = await ProdModel.find(
+  async getAllViews(querypage) {
+    const queryResult = await ProdModel.paginate(
       {},
-      {
-        title: true,
-        description: true,
-        code: true,
-        price: true,
-        stock: true,
-        category: true,
-        thumbnail: true,
-      }
-    ).lean();
-    return products;
-  }
-  
+      { limit: 5, page: querypage || 1 }
+    );
+    
+    const {
+      totalDocs,
+      limit,
+      totalPages,
+      page,
+      pagingCounter,
+      hasPrevPage,
+      hasNextPage,
+      prevPage,
+      nextPage,
+    } = queryResult;
+    let prodsPaginated = queryResult.docs;
+   
+    prodsPaginated = prodsPaginated.map((prod) => {
+      return {
+        _id: prod._id.toString(),
+        title: prod.title,
+        description: prod.description,
+        code: prod.code,
+        price: prod.price,
+        stock: prod.stock,
+        category: prod.category,
+        thumbnail: prod.thumbnail,
+        status: prod.status,
+      };
+    });
+    
+    return ({
+      
+      prodsPaginated,
+      totalDocs,
+      limit,
+      totalPages,
+      page,
+      pagingCounter,
+      hasPrevPage,
+      hasNextPage,
+      prevPage,
+      nextPage,
+    })
+    }
+
   async addProduct({
     title,
     description,
@@ -41,25 +73,38 @@ class ProductService {
     category,
     thumbnail,
   }) {
-    const productAdded = await ProdModel.create({
-      title,
-      description,
-      code,
-      price,
-      stock,
-      category,
-      thumbnail,
-    });
-    return productAdded;
+    const originalProduct = await ProdModel.findOne({ code: code });
+    if (originalProduct) {
+      return false;
+    } else {
+      const productAdded = await ProdModel.create({
+        title,
+        description,
+        code,
+        price,
+        stock,
+        category,
+        thumbnail,
+      });
+      return productAdded;
+    }
   }
   async updateProduct(_id, updaProd) {
-    const result = await ProdModel.updateOne({ _id: _id }, { $set: updaProd });
+    const existingProduct = await ProdModel.findOne({ _id: _id });
+    if (existingProduct) {
+      const result = await ProdModel.updateOne(
+        { _id: _id },
+        { $set: updaProd }
+      );
 
-    if (result.nModified === 0) {
-      return null;
+      if (result.nModified === 0) {
+        return null;
+      }
+
+      return updaProd;
+    } else {
+      return false;
     }
-
-    return updaProd;
   }
   async deleteOne(_id) {
     const deleted = await ProdModel.deleteOne({ _id: _id });
@@ -67,12 +112,17 @@ class ProductService {
   }
   async getProductById(_id) {
     const productById = await ProdModel.findOne({ _id: _id });
-    return productById;
+    if (productById) {
+      return productById;
+    } else {
+      return false;
+    }
   }
-  async getProductByIdView(_id) {
-    const productById = await ProdModel.findOne({ _id: _id }).lean();
-    return productById;
-  }  
+  async getProductByIdView(pid) {
+    const productById = await ProdModel.findOne({ _id: pid }).lean();
+    let prodView = [productById]
+    return prodView;
+  }
   async getParams(queryParams) {
     const {
       limit = 10,
