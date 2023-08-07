@@ -1,7 +1,7 @@
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
 import local from "passport-local";
-import { UserModel } from "../DAO/models/user.model.js";
+import { userModel } from "../models/user.model.js";
 import { passportController } from "../controllers/passport.controller.js";
 import env from "../config/environment.config.js";
 
@@ -41,7 +41,7 @@ export function iniPassport() {
   });
 
   passport.deserializeUser(async (id, done) => {
-    let user = await UserModel.findById(id);
+    let user = await userModel.findUserById(id)
     done(null, user);
   });
 }

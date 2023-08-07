@@ -12,4 +12,4 @@ const schema = new Schema({
   status: { type: Boolean, default: true },
 });
 schema.plugin(mongoosePaginate);
-export const ProdModel = model("products", schema);
+export const ProdModelMongoose = model("products", schema);

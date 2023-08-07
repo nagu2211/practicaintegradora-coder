@@ -1,42 +1,28 @@
-import { UserModel } from "../DAO/models/user.model.js";
+import { userModel } from "../models/user.model.js";
 
 class UserService {
   async getAll() {
-    const users = await UserModel.find(
-      {},
-      { _id: true, firstName: true, lastName: true, email: true }
-    );
+    const users = userModel.getAllUsers();
     return users;
   }
   async create({ firstName,lastName,age, email, password, role }) {
-    const userCreated = await UserModel.create({ firstName, lastName , age , email, password, role:role, cart: '' });
+    const userCreated = await userModel.createUser({firstName,lastName,age, email, password, role });
     return userCreated;
   }
   async findUserByEmail(email) {
-    const found = await UserModel.findOne({ email: email });
+    const found = await userModel.findByEmail(email);
     return found || false;
   }
   async login({ email }) {
-    const found = await UserModel.findOne({
-      email: email,
-    }, {firstName: true, email: true, password:true,rol:true});
+    const found = await userModel.findUser(email)
     return found || false;
   }
   async updateOne({ _id, firstName, lastName, email }) {
-    const userUpdated = await UserModel.updateOne(
-      {
-        _id: _id,
-      },
-      {
-        firstName,
-        lastName,
-        email,
-      }
-    );
+    const userUpdated = await userModel.update({ _id, firstName, lastName, email })
     return userUpdated;
   }
   async deleteOne(_id) {
-    const deleted = await UserModel.deleteOne({ _id: _id });
+    const deleted = await userModel.delete(_id);
     return deleted;
   }
 }

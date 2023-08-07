@@ -1,26 +1,12 @@
-import { ProdModel } from "../DAO/models/product.model.js";
+import { productModel } from "../models/product.model.js";
 
 class ProductService {
   async getAll() {
-    const products = await ProdModel.find(
-      {},
-      {
-        title: true,
-        description: true,
-        code: true,
-        price: true,
-        stock: true,
-        category: true,
-        thumbnail: true,
-      }
-    );
+    const products = await productModel.getAllProducts();
     return products;
   }
   async getAllViews(querypage) {
-    const queryResult = await ProdModel.paginate(
-      {},
-      { limit: 5, page: querypage || 1 }
-    );
+    const queryResult = await productModel.paginate(querypage);
     
     const {
       totalDocs,
@@ -73,11 +59,11 @@ class ProductService {
     category,
     thumbnail,
   }) {
-    const originalProduct = await ProdModel.findOne({ code: code });
+    const originalProduct = await productModel.findByCode(code);
     if (originalProduct) {
       return false;
     } else {
-      const productAdded = await ProdModel.create({
+      const productAdded = await productModel.createProduct(
         title,
         description,
         code,
@@ -85,17 +71,14 @@ class ProductService {
         stock,
         category,
         thumbnail,
-      });
+      );
       return productAdded;
     }
   }
   async updateProduct(_id, updaProd) {
-    const existingProduct = await ProdModel.findOne({ _id: _id });
+    const existingProduct = await productModel.findOneProduct( _id );
     if (existingProduct) {
-      const result = await ProdModel.updateOne(
-        { _id: _id },
-        { $set: updaProd }
-      );
+      const result = await productModel.update(_id, updaProd);
 
       if (result.nModified === 0) {
         return null;
@@ -107,11 +90,11 @@ class ProductService {
     }
   }
   async deleteOne(_id) {
-    const deleted = await ProdModel.deleteOne({ _id: _id });
+    const deleted = await productModel.delete(_id);
     return deleted;
   }
   async getProductById(_id) {
-    const productById = await ProdModel.findOne({ _id: _id });
+    const productById = await productModel.findOneProduct( _id );
     if (productById) {
       return productById;
     } else {
@@ -119,7 +102,7 @@ class ProductService {
     }
   }
   async getProductByIdView(pid) {
-    const productById = await ProdModel.findOne({ _id: pid }).lean();
+    const productById = await productModel.findOneProductView(pid);
     let prodView = [productById]
     return prodView;
   }
@@ -169,7 +152,7 @@ class ProductService {
       sort: sort === "desc" ? "-price" : sort === "asc" ? "price" : undefined,
     };
 
-    const result = await ProdModel.paginate(filter, options);
+    const result = await productModel.paginatePersonalized(filter, options);
 
     const resp = {
       status: filterError === true ? "error" : "success",

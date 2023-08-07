@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-import { MsgModel } from "../DAO/models/msgs.model.js";
-import { ProdModel } from "../DAO/models/product.model.js";
+import { msgsModel } from "../models/msgs.model.js";
+import {productModel} from "../models/product.model.js"
 
 export function connectSocketServer(httpServer) {
   const socketServer = new Server(httpServer);
@@ -9,7 +9,7 @@ export function connectSocketServer(httpServer) {
     console.log("cliente conectado");
 
     try {
-      const allProducts = await ProdModel.find({});
+      const allProducts = await productModel.getAllProducts();
       socket.emit("products", allProducts);
     } catch (e) {
       console.log(e);
@@ -17,8 +17,8 @@ export function connectSocketServer(httpServer) {
 
     socket.on("new-product", async (newProd) => {
       try {
-        await ProdModel.create(newProd);
-        const prods = await ProdModel.find({});
+        await productModel.create(newProd)
+        const prods = await productModel.getAllProducts();
         socketServer.emit("products", prods)
       } catch (e) {
         console.log(e);
@@ -27,8 +27,8 @@ export function connectSocketServer(httpServer) {
 
     socket.on("delete-product", async ({ idProd }) => {
       try {
-        await ProdModel.deleteOne({ _id: idProd });
-        const prods = await ProdModel.find({});
+        await productModel.delete(idProd);
+        const prods = await productModel.getAllProducts();
         socketServer.emit("products", prods);
       } catch (e) {
         console.log(e);
@@ -37,12 +37,12 @@ export function connectSocketServer(httpServer) {
 
     socket.on("msg_front_to_back", async (msg) => {
       try {
-        await MsgModel.create(msg);
+        await msgsModel.createMsg(msg)
       } catch (e) {
         console.log(e);
       }
       try {
-        const msgs = await MsgModel.find({});
+        const msgs = await msgsModel.getAllMsgs;
         socketServer.emit("listado_de_msgs", msgs);
       } catch (e) {
         console.log(e);

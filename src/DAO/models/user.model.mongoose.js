@@ -10,4 +10,4 @@ const schema = new Schema({
   role: { type: String, default: "user", required: true },
 });
 
-export const UserModel = model("users", schema);
+export const UserModelMongoose = model("users", schema);

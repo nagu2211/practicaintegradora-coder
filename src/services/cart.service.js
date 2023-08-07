@@ -1,18 +1,16 @@
-import { CartModel } from "../DAO/models/cart.model.js";
+import { cartModel } from "../models/cart.model.js";
 
 class CartService {
   async getAllCarts() {
-    const carts = await CartModel.find({});
+    const carts = await cartModel.getCarts();
     return carts;
   }
   async newCart() {
-    const newCart = await CartModel.create({});
+    const newCart = await cartModel.createCart();
     return newCart;
   }
   async getOneCart(_id) {
-    const cart = await CartModel.findOne({ _id: _id }).populate(
-      "products.product"
-    );
+    const cart = await cartModel.findOneCart()
     const simplifiedCart = cart.products.map((item) => {
       return {
         thumbnail: item.product.thumbnail,
@@ -23,8 +21,8 @@ class CartService {
     });
     return simplifiedCart ;
   }
-  addProductToCart = async (cid, pid) => {
-    const cartFound = await CartModel.findById(cid);
+   async addProductToCart(cid, pid) {
+    const cartFound = await cartModel.findById(cid);
 
     if (cartFound) {
       const productFound = cartFound.products.find(
@@ -38,17 +36,14 @@ class CartService {
       await cartFound.save();
       return cartFound;
     } else {
-      const newCart = await CartModel.create({
-        _id: cid,
-        products: [{ product: pid, quantity: 1 }],
-      });
+      const newCart = cartModel.newCart(cid,pid)
       return newCart;
     }
   };
 
   async removeProduct(cid, pid) {
     try {
-      const cart = await CartModel.findById(cid);
+      const cart = await cartModel.findById(cid);
       const prodIndex = cart.products.findIndex(
         (p) => p.product.toString() === pid
       );
@@ -63,11 +58,7 @@ class CartService {
   }
   async updateCart(cid, products) {
     try {
-      const cart = await CartModel.findByIdAndUpdate(
-        cid,
-        { products },
-        { new: true }
-      );
+      const cart = await cartModel.findByIdAndUpdate(cid,products)
       return cart;
     } catch (error) {
       throw new Error("Error updating cart in database");
@@ -75,7 +66,7 @@ class CartService {
   }
   async updateProdQuantity(cid, pid, quantity) {
     try {
-      const cart = await CartModel.findById(cid);
+      const cart = await cartModel.findById(cid);
       const prodIndex = cart.products.findIndex(
         (p) => p.product.toString() === pid
       );
@@ -91,7 +82,7 @@ class CartService {
   }
   async clearCart(cid) {
     try {
-      const cart = await CartModel.findById(cid);
+      const cart = await cartModel.findById(cid);
       cart.products = [];
       await cart.save();
     } catch (error) {

@@ -1,12 +1,12 @@
-import { UserModel } from "../DAO/models/user.model.js";
+import { userModel } from "../models/user.model.js";
 import { cartService } from "./cart.service.js";
 class PassportService {
   async findUser(username) {
-    const user = UserModel.findOne({ email: username });
+    const user = await userModel.findByEmail(username);
     return user;
   }
   async newUser(newUser) {
-    let userCreated = await UserModel.create(newUser);
+    let userCreated = await userModel.newUser(newUser)
     const cartNew = await cartService.newCart();
     const cartId = cartNew.toObject();
     const cartStringId = cartId._id.toString();
@@ -15,7 +15,7 @@ class PassportService {
     return userCreated;
   }
   async newAdmin(newAdmin) {
-    let adminCreated = await UserModel.create(newAdmin);
+    let adminCreated = await userModel.newUser(newAdmin)
     const cartNew = await cartService.newCart();
     const cartId = cartNew.toObject();
     const cartStringId = cartId._id.toString();

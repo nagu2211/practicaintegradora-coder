@@ -20,4 +20,4 @@ const productSchema = new Schema({
   }
 });
 
-export const CartModel = model("carts", productSchema);
+export const CartModelMongoose = model("carts", productSchema);
