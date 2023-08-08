@@ -57,13 +57,13 @@ class ProductModel {
         const indice = getAll.findIndex(ind => ind.id === _id);
       
         if (indice === -1) {
-          return null; // Elemento no encontrado
+          return null; 
         }
       
-        // Crear una copia del elemento encontrado
+        
         const elementoActualizado = { ...getAll[indice] };
       
-        // Actualizar solo las propiedades especificadas
+        
         Object.assign(elementoActualizado, updaProd);
       
         getAll[indice] = elementoActualizado;

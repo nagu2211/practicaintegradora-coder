@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import { msgsModel } from "../DAO/mongo/msgs.model.js";
+// import { msgsModel } from "../DAO/memory/msgs.memory.js";
 import {productModel} from "../DAO/mongo/product.model.js"
 
 export function connectSocketServer(httpServer) {
