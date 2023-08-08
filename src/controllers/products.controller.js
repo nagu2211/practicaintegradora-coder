@@ -1,11 +1,16 @@
 import { productService } from "../services/product.service.js";
 
+
 class ProductsController {
   getAll = async (req, res) => {
     try {
-      const queryParams = req.query;
-      const resp = await productService.getParams(queryParams);
-      return res.status(200).json(resp);
+      const resp = await productService.getAll();
+      return res.status(200).json({
+        status: "success",
+        msg: "all products",
+        payload: resp,
+      });
+      
     } catch (e) {
       console.log(e);
       return res.status(500).json({
@@ -69,16 +74,7 @@ class ProductsController {
         return res.status(201).json({
           status: "success",
           msg: "product added",
-          payload: {
-            _id: productAdded._id,
-            title: productAdded.title,
-            description: productAdded.description,
-            code: productAdded.code,
-            price: productAdded.price,
-            stock: productAdded.stock,
-            category: productAdded.category,
-            thumbnail: productAdded.thumbnail,
-          },
+          payload: {},
         });
       }
     } catch (e) {
@@ -129,13 +125,13 @@ class ProductsController {
       if (deleted?.deletedCount > 0) {
         return res.status(200).json({
           status: "success",
-          msg: "user deleted",
+          msg: "product deleted",
           payload: {},
         });
       } else {
         return res.status(404).json({
           status: "error",
-          msg: "User not found",
+          msg: "Product not found",
           payload: {},
         });
       }

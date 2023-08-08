@@ -1,4 +1,5 @@
-import { cartModel } from "../models/cart.model.js";
+import { cartModel } from "../DAO/mongo/cart.model.js";
+// import { cartModel } from "../DAO/memory/cart.memory.js";
 
 class CartService {
   async getAllCarts() {
@@ -10,7 +11,10 @@ class CartService {
     return newCart;
   }
   async getOneCart(_id) {
-    const cart = await cartModel.findOneCart()
+    const cart = await cartModel.findOneCart(_id)
+    if(cart.products == []){
+      return cart
+    } else {
     const simplifiedCart = cart.products.map((item) => {
       return {
         thumbnail: item.product.thumbnail,
@@ -20,21 +24,15 @@ class CartService {
       };
     });
     return simplifiedCart ;
+    }
+    
   }
    async addProductToCart(cid, pid) {
     const cartFound = await cartModel.findById(cid);
-
+    
     if (cartFound) {
-      const productFound = cartFound.products.find(
-        (product) => product.product.toString() === pid
-      );
-      if (productFound) {
-        productFound.quantity++;
-      } else {
-        cartFound.products.push({ product: pid, quantity: 1 });
-      }
-      await cartFound.save();
-      return cartFound;
+      let productToCart = await cartModel.quantityProdOfCart(cid, pid)
+      return productToCart
     } else {
       const newCart = cartModel.newCart(cid,pid)
       return newCart;

@@ -1,4 +1,4 @@
-import { MsgsModelMongoose } from "../DAO/models/msgs.model.mongoose.js";
+import { MsgsModelMongoose } from "./models/msgs.model.mongoose.js";
 
 class MsgsModel {
   async createMsg(msg){

@@ -1,4 +1,4 @@
-import { ProdModelMongoose } from "../DAO/models/product.model.mongoose.js";
+import { ProdModelMongoose } from "./models/product.model.mongoose.js";
 
 class ProductModel {
     async getAllProducts() {

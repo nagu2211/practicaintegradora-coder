@@ -1,4 +1,4 @@
-import { userModel } from "../models/user.model.js";
+import { userModel } from "../DAO/mongo/user.model.js";
 
 class UserService {
   async getAll() {

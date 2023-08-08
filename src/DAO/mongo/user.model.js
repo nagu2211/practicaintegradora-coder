@@ -1,4 +1,4 @@
-import { UserModelMongoose } from "../DAO/models/User.model.mongoose.js";
+import { UserModelMongoose } from "./models/user.model.mongoose.js";
 
 class UserModel {
   async getAllUsers() {

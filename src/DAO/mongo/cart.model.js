@@ -1,4 +1,4 @@
-import { CartModelMongoose } from "../DAO/models/cart.model.mongoose.js";
+import { CartModelMongoose } from "./models/cart.model.mongoose.js";
 
 class CartModel {
   async getCarts() {
@@ -17,7 +17,7 @@ class CartModel {
   }
   async findById(cid) {
     const cartFound = await CartModelMongoose.findById(cid);
-    return cartFound;
+    return cartFound || null;
   }
   async newCart(cid, pid) {
     const newCart = await CartModelMongoose.create({
@@ -25,6 +25,19 @@ class CartModel {
       products: [{ product: pid, quantity: 1 }],
     });
     return newCart;
+  }
+  async quantityProdOfCart(cid,pid){
+    const cartFound = await CartModelMongoose.findById(cid);
+    const productFound = cartFound.products.find(
+      (product) => product.product.toString() === pid
+    );
+    if (productFound) {
+      productFound.quantity++;
+    } else {
+      cartFound.products.push({ product: pid, quantity: 1 });
+    }
+    await cartFound.save();
+    return cartFound;
   }
   async findByIdAndUpdate(cid,products){
     const cart = await CartModelMongoose.findByIdAndUpdate(

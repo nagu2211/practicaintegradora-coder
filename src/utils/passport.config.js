@@ -1,7 +1,7 @@
 import passport from "passport";
 import GitHubStrategy from "passport-github2";
 import local from "passport-local";
-import { userModel } from "../models/user.model.js";
+import { userModel } from "../DAO/mongo/user.model.js";
 import { passportController } from "../controllers/passport.controller.js";
 import env from "../config/environment.config.js";
 

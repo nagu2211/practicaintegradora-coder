@@ -1,4 +1,6 @@
-import { productModel } from "../models/product.model.js";
+import { productModel } from "../DAO/mongo/product.model.js";
+// import { productModel } from "../DAO/memory/product.memory.js";
+
 
 class ProductService {
   async getAll() {
@@ -63,7 +65,7 @@ class ProductService {
     if (originalProduct) {
       return false;
     } else {
-      const productAdded = await productModel.createProduct(
+      const productAdded = await productModel.createProduct({
         title,
         description,
         code,
@@ -71,7 +73,7 @@ class ProductService {
         stock,
         category,
         thumbnail,
-      );
+    });
       return productAdded;
     }
   }
@@ -106,6 +108,7 @@ class ProductService {
     let prodView = [productById]
     return prodView;
   }
+  /*
   async getParams(queryParams) {
     const {
       limit = 10,
@@ -117,7 +120,7 @@ class ProductService {
     } = queryParams;
     let filter = {};
     let filterError = false;
-
+    
     if (query != undefined) {
       switch (query) {
         case "category":
@@ -140,28 +143,28 @@ class ProductService {
             filterError = true;
           }
           break;
-        default:
+          default:
           filter = {};
           filterError = true;
+        }
       }
-    }
-
-    const options = {
+      
+      const options = {
       page: parseInt(page),
       limit: parseInt(limit),
       sort: sort === "desc" ? "-price" : sort === "asc" ? "price" : undefined,
     };
 
     const result = await productModel.paginatePersonalized(filter, options);
-
+    
     const resp = {
       status: filterError === true ? "error" : "success",
       msg:
-        filterError === true
-          ? "without filters"
-          : query
-          ? `filter by ${query}`
-          : "without filters",
+      filterError === true
+      ? "without filters"
+      : query
+      ? `filter by ${query}`
+      : "without filters",
       payload: result.docs,
       totalPages: result.totalPages,
       prevPage: result.hasPrevPage ? result.prevPage : null,
@@ -170,15 +173,16 @@ class ProductService {
       hasPrevPage: result.hasPrevPage,
       hasNextPage: result.hasNextPage,
       prevLink: result.hasPrevPage
-        ? `/api/products?limit=${limit}&page=${result.prevPage}`
-        : null,
+      ? `/api/products?limit=${limit}&page=${result.prevPage}`
+      : null,
       nextLink: result.hasNextPage
-        ? `/api/products?limit=${limit}&page=${result.nextPage}`
-        : null,
+      ? `/api/products?limit=${limit}&page=${result.nextPage}`
+      : null,
     };
-
+    
     return resp;
   }
+  */
 }
 
 export const productService = new ProductService();

@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-import { msgsModel } from "../models/msgs.model.js";
-import {productModel} from "../models/product.model.js"
+import { msgsModel } from "../DAO/mongo/msgs.model.js";
+import {productModel} from "../DAO/mongo/product.model.js"
 
 export function connectSocketServer(httpServer) {
   const socketServer = new Server(httpServer);
@@ -42,7 +42,7 @@ export function connectSocketServer(httpServer) {
         console.log(e);
       }
       try {
-        const msgs = await msgsModel.getAllMsgs;
+        const msgs = await msgsModel.getAllMsgs();
         socketServer.emit("listado_de_msgs", msgs);
       } catch (e) {
         console.log(e);
