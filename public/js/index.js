@@ -12,7 +12,7 @@ async function getCurrentSession() {
     }
 
     const sessionData = await response.json();
-    const cartUser = sessionData?.user?.cart;
+    const cartUser = sessionData?.payload?.cart;
     return cartUser;
   } catch (error) {
     console.error('Error fetching current session:', error);
@@ -41,7 +41,6 @@ async function main(productId) {
     console.error('Error in main:', error);
   }
 }
-
 /*
 
 

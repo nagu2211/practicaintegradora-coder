@@ -1,8 +1,8 @@
 import { productService } from "../services/product.service.js";
-
+import ProductDTO from "../DAO/DTO/product.dto.js";
 
 class ProductsController {
-  getAll = async (req, res) => {
+  getAll = async (_, res) => {
     try {
       const resp = await productService.getAll();
       return res.status(200).json({
@@ -48,23 +48,11 @@ class ProductsController {
 
   addProduct = async (req, res) => {
     try {
-      const { title, description, code, price, stock, category, thumbnail } =
-        req.body;
-        const productAdded = await productService.addProduct({
-            title,
-            description,
-            code,
-            price,
-            stock,
-            category,
-            thumbnail,
-          });
+      const product = req.body;
+      const productDTO = new ProductDTO(product);
+      const productAdded = await productService.addProduct(productDTO);
   
-      if (!title || !description || !code || !price || !stock || !category) {
-        return res
-          .status(404)
-          .json({ status: "error", msg: "All fields are required", payload: {} });
-      } else if (productAdded == false) {
+      if (productAdded == false) {
         return res.status(404).json({
           status: "error",
           msg: "Not added: the product is repeated",

@@ -1,4 +1,4 @@
-
+import CurrentDTO from "../DAO/DTO/current.dto.js";
 class SessionsController {
    login = async (req, res) => {
     try {
@@ -54,7 +54,15 @@ class SessionsController {
     res.redirect("/products");
   }
   current =  (req, res) => {
-    return res.send(req.session);
+    const user = req.session.user
+    const userDTO = new CurrentDTO(user)
+ 
+    return res.status(200).json({
+      status: "succes",
+      msg: "current user",
+      payload: userDTO,
+    });
+    
   }
 }
     

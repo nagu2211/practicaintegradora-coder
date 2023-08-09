@@ -3,6 +3,7 @@ import { msgsModel } from "../DAO/mongo/msgs.model.js";
 // import { msgsModel } from "../DAO/memory/msgs.memory.js";
 import {productModel} from "../DAO/mongo/product.model.js"
 
+
 export function connectSocketServer(httpServer) {
   const socketServer = new Server(httpServer);
 
@@ -36,7 +37,7 @@ export function connectSocketServer(httpServer) {
       }
     });
 
-    socket.on("msg_front_to_back", async (msg) => {
+    socket.on("msg_front_to_back",async (msg) => {
       try {
         await msgsModel.createMsg(msg)
       } catch (e) {

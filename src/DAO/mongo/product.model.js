@@ -31,22 +31,8 @@ class ProductModel {
         const findOne = await ProdModelMongoose.findOne({ code: code });
         return findOne
       }
-      async createProduct(title,
-        description,
-        code,
-        price,
-        stock,
-        category,
-        thumbnail) {
-        const productAdded = await ProdModelMongoose.create({
-            title,
-            description,
-            code,
-            price,
-            stock,
-            category,
-            thumbnail,
-          });
+      async createProduct(productDTO) {
+        const productAdded = await ProdModelMongoose.create(productDTO);
           return productAdded;
       }
       async create(newProd){

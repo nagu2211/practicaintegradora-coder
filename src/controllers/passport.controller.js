@@ -1,7 +1,9 @@
 import env from "../config/environment.config.js";
-import { createHash, isValidPassword } from "../utils/bcrypt.js";
+import { isValidPassword } from "../utils/bcrypt.js";
 import fetch from "node-fetch";
 import { passportService } from "../services/passport.service.js";
+import RegisterDTO from "../DAO/DTO/register.dto.js";
+
 class PassportController {
     login=async (username, password, done) => {
         try {
@@ -23,33 +25,26 @@ class PassportController {
       }
     register = async (req, username, password, done) => {
         try {
-          const { email, firstName, lastName, age } = req.body;
+          const register = req.body;
+          const registerDTO = new RegisterDTO(register,password);
           let user = await passportService.findUser(username)
           if (user) {
             console.log("User already exists");
             return done(null, false);
           }
           
-          const newUser = {
-            email,
-            firstName,
-            lastName,
-            age,
-            cart:'',
-            password: createHash(password),
-          };
           const newAdmin = {
-            ...newUser,
+            ...registerDTO,
             role: "superadmin",
           };
           if (
-            email === env.adminEmail &&
+            register.email === env.adminEmail &&
             password === env.adminPassword
           ) {
             let adminCreated = await passportService.newAdmin(newAdmin)
             return done(null, adminCreated);
           } else {
-            let userCreated = await passportService.newUser(newUser)
+            let userCreated = await passportService.newUser(registerDTO)
             return done(null, userCreated);
           }
         } catch (e) {

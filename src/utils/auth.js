@@ -6,7 +6,7 @@ export function checkLogin(req, res, next) {
 	}
 }
 export function checkAdmin(req, res, next) {
-	if (req.session?.user?.email && req.session?.user?.rol == "admin") {
+	if (req.session?.user?.email && req.session?.user?.role == "superadmin") {
 		return next();
 	} else {
 		return res.status(401).render("error-page",{msg:"please log in as admin"});

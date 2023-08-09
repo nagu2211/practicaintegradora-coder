@@ -21,11 +21,21 @@ class CartService {
         title: item.product.title,
         price: item.product.price,
         quantity: item.quantity,
+        _id:item._id
       };
     });
     return simplifiedCart ;
     }
     
+  }
+  async getOneCartById(cid) {
+    const cart = await cartModel.findOneCart( cid );
+  
+  if (!cart) {
+    return null;
+  }
+  
+  return cart;
   }
    async addProductToCart(cid, pid) {
     const cartFound = await cartModel.findById(cid);
