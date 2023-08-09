@@ -178,6 +178,7 @@ class CartController {
           );
           productsToUpdate.push({
               title: productInfo.title,
+              price: productInfo.price,
               quantity: cartProduct.quantity,
           });
       }

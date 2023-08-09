@@ -6,6 +6,6 @@ import { cartService } from "../services/cart.service.js";
 export const ticketsRouter = express.Router();
 
 
-ticketsRouter.post("/:cid", ticketController.purchase );
-ticketsRouter.get("/cid", ticketController.getTicket);
+
+ticketsRouter.get("/:cid", ticketController.getTicket);
 
