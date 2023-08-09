@@ -1,7 +1,7 @@
+import { ProdModelMongoose } from "../DAO/mongo/models/product.model.mongoose.js";
 import { cartService } from "../services/cart.service.js";
 import { productService } from "../services/product.service.js";
-import { ProdModelMongoose } from "../DAO/mongo/models/product.model.mongoose.js";
-import { CartModelMongoose } from "../DAO/mongo/models/cart.model.mongoose.js";
+import {ticketService} from "../services/ticket.service.js"
 class CartController {
   getAllCarts = async (_, res) => {
     try {
@@ -147,26 +147,19 @@ class CartController {
     try {
       const { cid } = req.params;
       const cart = await cartService.getOneCartById(cid);
-
+      
       if (!cart) {
         return res
           .status(404)
           .json({ status: "error", message: "Carrito no encontrado" });
       }
 
-      if (!Array.isArray(cart.products)) {
-        return res
-          .status(400)
-          .json({ message: "El formato del carrito es incorrecto" });
-      }
-
       const productsToUpdate = [];
-
+      const productsNotStock = [];
       for (const cartProduct of cart.products) {
         const productInfo = await productService.getProductById(
           cartProduct.product
         );
-        console.log(productInfo);
         if (!productInfo) {
           return res
             .status(400)
@@ -176,24 +169,25 @@ class CartController {
         }
 
         if (cartProduct.quantity > productInfo.stock) {
-          return res
-            .status(400)
-            .json({
-              message: `No hay suficiente stock para ${productInfo.title}, no podra comprar este producto pero los demas si.`,
-            });
-        }
-
-        productInfo.stock -= cartProduct.quantity;
-        productsToUpdate.push(productInfo);
+          productsNotStock.push(productInfo.title);
+      } else if (cartProduct.quantity <= productInfo.stock) {
+          const newStock = productInfo.stock - cartProduct.quantity;
+          await ProdModelMongoose.updateOne(
+              { _id: productInfo._id },
+              { $set: { stock: newStock } }
+          );
+          productsToUpdate.push({
+              title: productInfo.title,
+              quantity: cartProduct.quantity,
+          });
+      }
       }
 
-      for (const productToUpdate of productsToUpdate) {
-        await productToUpdate.save();
-      }
-
+      
+      const ticket = await ticketService.finalizarCompra(cid,productsToUpdate,productsNotStock)
       return res
         .status(200)
-        .json({ status: "success", message: "Compra completada con éxito" });
+        .json({ status: "success", message: "Compra completada con éxito", payload : ticket});
     } catch (e) {
       console.log(e);
       return res.status(500).json({
