@@ -171,6 +171,7 @@ class CartController {
         if (cartProduct.quantity > productInfo.stock) {
           productsNotStock.push(productInfo.title);
       } else if (cartProduct.quantity <= productInfo.stock) {
+          await cartService.removeProduct(cid,productInfo._id.toString())
           const newStock = productInfo.stock - cartProduct.quantity;
           await ProdModelMongoose.updateOne(
               { _id: productInfo._id },
