@@ -34,7 +34,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: env.mongoUrl,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-      ttl: 15,
+      ttl: 3600,
     }),
     secret: "un-re-secreto",
     resave: true,
