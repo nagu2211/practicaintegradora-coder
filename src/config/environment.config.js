@@ -15,6 +15,8 @@ export default {
   adminEmail: process.env.ADMIN_EMAIL,
   adminPassword: process.env.ADMIN_PASSWORD,
   githubClientId: process.env.GITHUB_CLIENT_ID,
-  githubClientSecret : process.env.GITHUB_CLIENT_SECRET
+  githubClientSecret : process.env.GITHUB_CLIENT_SECRET,
+  googleEmail : process.env.GOOGLE_EMAIL,
+  googlePass : process.env.GOOGLE_PASS
 };
 

@@ -17,6 +17,8 @@ import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
 import env from "./config/environment.config.js";
 import { ticketsRouter } from "./routes/ticket.router.js";
+import nodemailer from "nodemailer"
+import { emailRouter } from "./routes/email.router.js";
 
 const PORT = env.port;
 const app = express();
@@ -49,6 +51,19 @@ iniPassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
+//nodemailer
+const transport = nodemailer.createTransport({
+  service: "gmail",
+  port: 587,
+  auth: {
+    user: env.googleEmail,
+    pass: env.googlePass,
+  },
+});
+export const transportNodemailer = transport
+
+
+
 //Config del motor de plantillas
 app.engine("handlebars", handlebars.engine());
 app.set("views", __dirname + "/views");
@@ -56,6 +71,7 @@ app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
 app.use("/api/carts/", cartsRouter);
+app.use("/email", emailRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/ticket/" , ticketsRouter);
 app.use("/api/sessions", sessionsRouter);
