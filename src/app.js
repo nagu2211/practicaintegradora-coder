@@ -1,23 +1,23 @@
-import express from "express";
-import handlebars from "express-handlebars";
-import { __dirname } from "./config.js";
-import { chatsRouter } from "./routes/chat.router.js";
-import { connectMongo } from "./utils/dbConnection.js";
-import { connectSocketServer } from "./utils/socketServer.js";
-import { productsRouter } from "./routes/products.router.js";
-import { viewProductsRouter } from "./routes/view-products.router.js";
-import { viewUsersRouter } from "./routes/view-users.router.js";
-import { viewCartsRouter } from "./routes/view-carts.router.js";
-import { sessionsRouter } from "./routes/sessions.router.js";
-import { cartsRouter } from "./routes/carts.router.js";
-import { iniPassport } from "./utils/passport.config.js";
-import passport from "passport";
-import session from "express-session";
 import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
+import express from "express";
+import handlebars from "express-handlebars";
+import session from "express-session";
+import nodemailer from "nodemailer";
+import passport from "passport";
+import { __dirname } from "./config.js";
 import env from "./config/environment.config.js";
+import { cartsRouter } from "./routes/carts.router.js";
+import { chatsRouter } from "./routes/chat.router.js";
+import { productsRouter } from "./routes/products.router.js";
+import { sessionsRouter } from "./routes/sessions.router.js";
 import { ticketsRouter } from "./routes/ticket.router.js";
-import nodemailer from "nodemailer"
+import { viewCartsRouter } from "./routes/view-carts.router.js";
+import { viewProductsRouter } from "./routes/view-products.router.js";
+import { viewUsersRouter } from "./routes/view-users.router.js";
+import { connectMongo } from "./utils/dbConnection.js";
+import { iniPassport } from "./utils/passport.config.js";
+import { connectSocketServer } from "./utils/socketServer.js";
 
 
 const PORT = env.port;

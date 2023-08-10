@@ -1,3 +1,4 @@
+import { ProdModelMongoose } from "./models/product.model.mongoose.js";
 import { UserModelMongoose } from "./models/user.model.mongoose.js";
 
 class UserModel {
@@ -61,6 +62,13 @@ class UserModel {
   async newUser(newUser) {
     let userCreated = await UserModelMongoose.create(newUser);
     return userCreated
+  }
+  async updateOne(productInfo,newStock){
+    const updateProd = await ProdModelMongoose.updateOne(
+      { _id: productInfo._id },
+      { $set: { stock: newStock } }
+  );
+  return updateProd
   }
 }
 

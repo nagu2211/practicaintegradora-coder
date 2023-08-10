@@ -1,11 +1,5 @@
-import { ProdModelMongoose } from "../DAO/mongo/models/product.model.mongoose.js";
 import { cartService } from "../services/cart.service.js";
-import { productService } from "../services/product.service.js";
-import {ticketService} from "../services/ticket.service.js"
-import { userService } from "../services/user.service.js";
-import { transportNodemailer } from "../app.js";
-import env from "../config/environment.config.js"
-import { __dirname } from "../config.js";
+import { ticketService } from "../services/ticket.service.js";
 class CartController {
   getAllCarts = async (_, res) => {
     try {
@@ -151,77 +145,23 @@ class CartController {
     try {
       const { cid } = req.params;
       const cart = await cartService.getOneCartById(cid);
-      const userCart = await userService.findUserByCart(cid);
       if (!cart) {
         return res
           .status(404)
-          .json({ status: "error", message: "Carrito no encontrado" });
+          .json({ status: "error", message: "Cart not found" });
       }
-
-      const productsToUpdate = [];
-      const productsNotStock = [];
-      for (const cartProduct of cart.products) {
-        const productInfo = await productService.getProductById(
-          cartProduct.product
-        );
-        if (!productInfo) {
-          return res
-            .status(400)
-            .json({
-              message: `Producto no encontrado: ${cartProduct.product}`,
-            });
-        }
-
-        if (cartProduct.quantity > productInfo.stock) {
-          productsNotStock.push(productInfo.title);
-      } else if (cartProduct.quantity <= productInfo.stock) {
-          await cartService.removeProduct(cid,productInfo._id.toString())
-          const newStock = productInfo.stock - cartProduct.quantity;
-          await ProdModelMongoose.updateOne(
-              { _id: productInfo._id },
-              { $set: { stock: newStock } }
-          );
-          productsToUpdate.push({
-              title: productInfo.title,
-              price: productInfo.price,
-              quantity: cartProduct.quantity,
+      const createTicket = await ticketService.createTicket(cid)
+      if (createTicket == null) {
+        return res
+          .status(400)
+          .json({
+            message: `Product/s not found`,
           });
       }
-      }
-
-      
-      const ticket = await ticketService.finalizarCompra(cid,productsToUpdate,productsNotStock,userCart)
-      const result = await transportNodemailer.sendMail({
-        from: " Correo Test de Santi <" + env.googleEmail + ">",
-        to: userCart.email,
-        subject: "Ticket de compra",
-        html: `
-        <div>
-        <h1>Ticket de compra</h1>
-        <p>Detalles de la compra:</p>
-        <p>codigo de su ticket (no lo pierda) : ${ticket.code}</p>
-        <p>productos adquiridos :</p>
-        <ul>
-           ${ticket.products_purchased.map((item)=> ` <li><strong>${item.title}</strong>: ${item.quantity}</li>`).join('')}
-        </ul>
-         <p> productos no adquiridos por falta de stock : ${ticket.products_not_purchased}</p>
-        
-        <p>Total: ${ticket.amount}</p>
-        <p>hora y fecha de compra : ${ticket.purchase_datetime.toLocaleString()}</p>
-      </div>
-                      `,
-        attachments: [
-          {
-            filename: "giphy.gif",
-            path: __dirname + "/images/giphy.gif",
-            cid: "giphy",
-          },
-        ],
-      });
   
       return res
         .status(200)
-        .json({ status: "success", message: "Compra completada con éxito", payload : ticket});
+        .json({ status: "success", message: "Compra completada con éxito", payload : createTicket});
     } catch (e) {
       console.log(e);
       return res.status(500).json({
