@@ -18,7 +18,7 @@ import cookieParser from "cookie-parser";
 import env from "./config/environment.config.js";
 import { ticketsRouter } from "./routes/ticket.router.js";
 import nodemailer from "nodemailer"
-import { emailRouter } from "./routes/email.router.js";
+
 
 const PORT = env.port;
 const app = express();
@@ -71,7 +71,6 @@ app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
 app.use("/api/carts/", cartsRouter);
-app.use("/email", emailRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/ticket/" , ticketsRouter);
 app.use("/api/sessions", sessionsRouter);

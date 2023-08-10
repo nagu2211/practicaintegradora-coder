@@ -24,6 +24,10 @@ class UserModel {
     const found = await UserModelMongoose.findOne({ email: email });
     return found || false;
   }
+  async findByCart(cid) {
+    const found = await UserModelMongoose.findOne({ cart: cid });
+    return found || false;
+  }
   async findUser(email) {
     const found = await UserModelMongoose.findOne(
       {

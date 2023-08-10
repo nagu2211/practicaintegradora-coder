@@ -7,7 +7,8 @@ const schema = new Schema({
     amount: { type: Number, required: true },
     purchaser: { type: String, required: false },
     products_purchased : [],
-    products_not_purchased : [{type:String , default:"none"}]
+    products_not_purchased : [{type:String , default:"none"}],
+    email : {type:String, required:true}
 });
 
 export const TicketModelMongoose = model("tickets", schema);

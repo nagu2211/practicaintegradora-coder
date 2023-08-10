@@ -17,7 +17,7 @@ class TicketService {
 
     return uniqueCode;
   }
-  async finalizarCompra(cid, productsToUpdate, productsNotStock) {
+  async finalizarCompra(cid, productsToUpdate, productsNotStock,userCart) {
     try {
       const uniqueCode = await this.generateUniqueCode();
       const cart = await cartService.getOneCartById(cid);
@@ -42,6 +42,7 @@ class TicketService {
         products_purchased: productsPurchasedInfo,
         products_not_purchased: productsNotStock,
         amount: total,
+        email : userCart.email
       });
 
       return newTicket;

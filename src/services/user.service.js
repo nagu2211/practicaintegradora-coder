@@ -14,6 +14,10 @@ class UserService {
     const found = await userModel.findByEmail(email);
     return found || false;
   }
+  async findUserByCart(cid){
+    const found = await userModel.findByCart(cid);
+    return found || false;
+  }
   async login({ email }) {
     const found = await userModel.findUser(email)
     return found || false;
