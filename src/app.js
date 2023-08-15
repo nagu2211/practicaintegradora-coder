@@ -18,7 +18,8 @@ import { viewUsersRouter } from "./routes/view-users.router.js";
 import { connectMongo } from "./utils/dbConnection.js";
 import { iniPassport } from "./utils/passport.config.js";
 import { connectSocketServer } from "./utils/socketServer.js";
-
+import { fakeProductsRouter } from "./routes/fakeProducts.router.js";
+import errorHandler from "./middlewares/error.js"
 
 const PORT = env.port;
 const app = express();
@@ -79,9 +80,11 @@ app.use("/", viewUsersRouter);
 app.use("/products", viewProductsRouter);
 app.use("/carts", viewCartsRouter);
 app.use("/chat", chatsRouter);
+app.use("/mockingproducts", fakeProductsRouter)
 
 app.get("*", (_, res) => {
   return res
     .status(404)
     .json({ status: "error", msg: "no se encuentra esa ruta", payload: {} });
-});
+  });
+  app.use(errorHandler)
