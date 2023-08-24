@@ -3,8 +3,10 @@ import ProductDTO from "../DAO/DTO/product.dto.js";
 import CustomError from "../services/errors/custom-error.js"
 import { generateProductErrorInfo } from "../services/errors/info.js";
 import Errors from "../services/errors/enums.js";
+import { formatCurrentDate } from "../utils/currentDate.js";
+
 class ProductsController {
-  getAll = async (_, res) => {
+  getAll = async (req, res) => {
     try {
       const resp = await productService.getAll();
       return res.status(200).json({
@@ -14,7 +16,7 @@ class ProductsController {
       });
       
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in getAll : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -39,7 +41,7 @@ class ProductsController {
           .json({ status: "error", msg: "product not found", payload: {} });
       }
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in productById : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -76,7 +78,7 @@ class ProductsController {
         });
       }
     } catch (e) {
-      console.log(e.cause)
+      req.logger.error(`Error in addProduct : ${e.cause}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         name: e.name,
@@ -108,7 +110,7 @@ class ProductsController {
         });
       }
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in updateProduct : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -134,7 +136,7 @@ class ProductsController {
         });
       }
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in deleteProduct : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",

@@ -1,5 +1,5 @@
 import { productService } from "../services/product.service.js";
-
+import { formatCurrentDate } from "../utils/currentDate.js";
 class ViewProductsController {
   getAll = async (req, res) => {
     try {
@@ -16,7 +16,7 @@ class ViewProductsController {
         productsView,
       });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in getAll products-view : ${e.message}` + formatCurrentDate)
       return res
         .status(500)
         .render("error-page", { msg: "unexpected error on the server" });
@@ -30,7 +30,7 @@ class ViewProductsController {
         product
     });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in getProductById : ${e.message}` + formatCurrentDate)
       return res
         .status(500)
         .render("error-page", { msg: "unexpected error on the server" });

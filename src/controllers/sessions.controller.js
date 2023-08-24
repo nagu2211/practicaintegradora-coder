@@ -1,4 +1,5 @@
 import CurrentDTO from "../DAO/DTO/current.dto.js";
+import { formatCurrentDate } from "../utils/currentDate.js";
 class SessionsController {
    login = async (req, res) => {
     try {
@@ -18,7 +19,7 @@ class SessionsController {
 
       return res.redirect("/products");
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in loginSession : ${e.message}` + formatCurrentDate)
       return res
         .status(500)
         .render("error-page", { msg: "unexpected error on the server" });
@@ -43,7 +44,7 @@ class SessionsController {
 
       return res.redirect("/products");
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in registerSession : ${e.message}` + formatCurrentDate)
       return res
         .status(500)
         .render("error-page", { msg: "unexpected error on the server" });

@@ -1,12 +1,21 @@
 import { connect } from "mongoose";
 import env from "../config/environment.config.js"
-
+import { PORT } from "../app.js";
+import { devLogger,prodLogger } from "./logger.js";
+import { formatCurrentDate } from "./currentDate.js";
 export async function connectMongo() {
   try {
     await connect(env.mongoUrl);
-    console.log("plug to mongo!");
+    if(PORT == 8080){
+      devLogger.info("mongo connected!");
+    } else {
+      prodLogger.info("mongo connected!")
+    }
   } catch (e) {
-    console.log(e);
-    throw "can not connect to the db";
+    if(PORT == 8080){
+      devLogger.error("can not connect to the db " + formatCurrentDate);
+    } else {
+      prodLogger.error("can not connect to the db " + formatCurrentDate);
+    }
   }
 }

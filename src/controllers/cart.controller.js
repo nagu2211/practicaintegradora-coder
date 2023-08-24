@@ -1,7 +1,8 @@
 import { cartService } from "../services/cart.service.js";
 import { ticketService } from "../services/ticket.service.js";
+import { formatCurrentDate } from "../utils/currentDate.js";
 class CartController {
-  getAllCarts = async (_, res) => {
+  getAllCarts = async (req, res) => {
     try {
       let carts = await cartService.getAllCarts();
       return res.status(200).json({
@@ -10,7 +11,7 @@ class CartController {
         payload: carts,
       });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in getAllCarts ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -18,7 +19,7 @@ class CartController {
       });
     }
   };
-  newCart = async (_, res) => {
+  newCart = async (req, res) => {
     try {
       let newCart = await cartService.newCart();
       return res.status(201).json({
@@ -27,7 +28,7 @@ class CartController {
         payload: newCart,
       });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in newCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -45,7 +46,7 @@ class CartController {
         payload: cart,
       });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in getOneCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -64,7 +65,7 @@ class CartController {
         payload: cart,
       });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in addProductToCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -83,7 +84,7 @@ class CartController {
         .status(200)
         .json({ status: "succes", message: "product removed from cart" });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in removeProduct : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -101,7 +102,7 @@ class CartController {
         .status(200)
         .json({ status: "succes", message: "cart updated succesfully", cart });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in updateCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -115,7 +116,7 @@ class CartController {
       const cart = await cartService.addProductToCart(cid, pid);
       res.status(201).json(cart);
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in updateProduct : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -133,7 +134,7 @@ class CartController {
         .status(200)
         .json({ status: "succes", message: "the cart has been cleared" });
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in clearCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",
@@ -163,7 +164,7 @@ class CartController {
         .status(200)
         .json({ status: "success", message: "Compra completada con éxito", payload : createTicket});
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in checkout : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
         status: "error",
         msg: "something went wrong :(",

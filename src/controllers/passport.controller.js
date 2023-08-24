@@ -3,23 +3,24 @@ import { isValidPassword } from "../utils/bcrypt.js";
 import fetch from "node-fetch";
 import { passportService } from "../services/passport.service.js";
 import RegisterDTO from "../DAO/DTO/register.dto.js";
-
+import { formatCurrentDate } from "../utils/currentDate.js";
 class PassportController {
-    login=async (username, password, done) => {
+    login=async (req,username, password, done) => {
         try {
           const user = await passportService.findUser(username)
           
           if (!user) {
-            console.log("User Not Found with username (email) " + username);
+            req.logger.error(`Failed login attempt for the user ${username} : user not found`)
             return done(null, false);
           }
           if (!isValidPassword(password, user.password)) {
-            console.log("Invalid Password");
+            req.logger.warn(`Failed login attempt for the user ${username} : invalid password`)
             return done(null, false);
           }
 
           return done(null, user);
         } catch (err) {
+          req.logger.error(`Error during the login session : ${err.message} ` + formatCurrentDate)
           return done(err);
         }
       }
@@ -29,7 +30,7 @@ class PassportController {
           const registerDTO = new RegisterDTO(register,password);
           let user = await passportService.findUser(username)
           if (user) {
-            console.log("User already exists");
+            req.logger.warn(`error during registration for the user ${user} : user already exists`)
             return done(null, false);
           }
           
@@ -48,12 +49,11 @@ class PassportController {
             return done(null, userCreated);
           }
         } catch (e) {
-          console.log("Error in register");
-          console.log(e);
+          req.logger.error(`Error during the register session : ${e.message} ` + formatCurrentDate)
           return done(e);
         }
       }
-      github=async (accesToken, _, profile, done) => {
+      github=async (req,accesToken, _, profile, done) => {
         try {
           const res = await fetch("https://api.github.com/user/emails", {
             headers: {
@@ -79,14 +79,13 @@ class PassportController {
               cart:''
             };
             let userCreated = await passportService.newUser(newUser)
-            console.log("User Registration succesful");
+            req.logger.info("User Registration succesful")
             return done(null, userCreated);
           } else {
             return done(null, user);
           }
         } catch (e) {
-          console.log("Error en auth github");
-          console.log(e);
+          req.logger.error(`Error when registering with github : ${e.message} ` + formatCurrentDate)
           return done(e);
         }
       }

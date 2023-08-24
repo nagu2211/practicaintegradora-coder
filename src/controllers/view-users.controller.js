@@ -1,19 +1,20 @@
+import { formatCurrentDate } from "../utils/currentDate.js";
 class ViewUsersController {
-  login = async (_, res) => {
+  login = async (req, res) => {
     try {
       return res.status(200).render("login");
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in login view-users : ${e.message}` + formatCurrentDate)
       return res
         .status(500)
         .render("error-page", { msg: "unexpected error on the server" });
     }
   };
-  register = async (_, res) => {
+  register = async (req, res) => {
     try {
       return res.status(200).render("register");
     } catch (e) {
-      console.log(e);
+      req.logger.error(`Error in register view-users : ${e.message}` + formatCurrentDate)
       return res
         .status(500)
         .render("error-page", { msg: "unexpected error on the server" });
@@ -22,7 +23,7 @@ class ViewUsersController {
   logout = (req, res) => {
     req.session.destroy((err) => {
       if (err) {
-        console.log(err);
+        req.logger.error(`Error in logout view-users : ${err.message}` + formatCurrentDate)
         return res.status(401).render("error-page", { msg: "logout error" });
       }
       res.redirect("/");

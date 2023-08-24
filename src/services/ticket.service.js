@@ -5,6 +5,7 @@ import { productService } from "./product.service.js";
 import { userService } from "./user.service.js";
 import { userModel } from "../DAO/mongo/user.model.js";
 import { emailService } from "./email.service.js";
+import { formatCurrentDate } from "../utils/currentDate.js";
 class TicketService {
   async generateUniqueCode() {
     let uniqueCode = nanoid();
@@ -50,7 +51,7 @@ class TicketService {
       const sendEmail = await emailService.sendTicketForEmail(ticket,userCart)
       return ticket
   }
-  async finalizarCompra(cid, productsToUpdate, productsNotStock,userCart) {
+  async finalizarCompra(req,cid, productsToUpdate, productsNotStock,userCart) {
     try {
       const uniqueCode = await this.generateUniqueCode();
       const cart = await cartService.getOneCartById(cid);
@@ -80,7 +81,7 @@ class TicketService {
 
       return newTicket;
     } catch (error) {
-      console.error("Error al formalizar la compra:", error);
+      req.logger.error("Error during checkout" + error)
     }
   }
   async getTicketById(cid){

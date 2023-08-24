@@ -1,3 +1,7 @@
+import { formatCurrentDate } from "../../src/utils/currentDate.js";
+import { PORT } from "../../src/app.js";
+import { devLogger,prodLogger } from "../../src/utils/logger.js";
+
 async function getCurrentSession() {
   try {
     const response = await fetch('/api/sessions/current', {
@@ -15,7 +19,11 @@ async function getCurrentSession() {
     const cartUser = sessionData?.payload?.cart;
     return cartUser;
   } catch (error) {
-    console.error('Error fetching current session:', error);
+    if(PORT == 8080){
+      devLogger.error('Error fetching current session: ', error)
+    } else {
+      prodLogger.error('Error fetching current session: ', error)
+    }
   }
 }
 async function main(productId) {
@@ -31,14 +39,26 @@ async function main(productId) {
       })
         .then(response => response.json())
         .then(data => {
-          console.log('Product added to cart:', data);
+          if(PORT == 8080){
+            devLogger.info('Product added to cart: ' + data)
+          } else {
+            prodLogger.info('Product added to cart: ' + data)
+          }
         })
         .catch(error => {
-          console.error('error when adding product to cart:', error);
+          if(PORT == 8080){
+            devLogger.error('error when adding product to cart: ', error)
+          } else {
+            prodLogger.error('error when adding product to cart: ', error)
+          }
         });
     
   } catch (error) {
-    console.error('Error in main:', error);
+    if(PORT == 8080){
+      devLogger.error('Error in main: ' + error)
+    } else {
+      prodLogger.error('Error in main: ' + error)
+    }
   }
 }
 /*

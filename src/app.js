@@ -20,15 +20,16 @@ import { iniPassport } from "./utils/passport.config.js";
 import { connectSocketServer } from "./utils/socketServer.js";
 import { fakeProductsRouter } from "./routes/fakeProducts.router.js";
 import errorHandler from "./middlewares/error.js"
+import { devLogger,prodLogger,addLogger } from "./utils/logger.js";
 
-const PORT = env.port;
+export const PORT = env.port;
+
 const app = express();
 
+app.use(addLogger)
 connectMongo();
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cookieParser());
 app.use(
   session({
@@ -43,8 +44,12 @@ app.use(
   })
 );
 
-const httpServer = app.listen(PORT, () => {
-  console.log(`Example app listening on port http://localhost:${PORT}/`);
+const httpServer = app.listen(PORT, () => { 
+  if(PORT==8080){
+    devLogger.info(`Example app listening on port http://localhost:${PORT}/`);
+  } else {
+    prodLogger.info(`Example app listening on port http://localhost:${PORT}/`);
+  }
 });
 connectSocketServer(httpServer);
 
