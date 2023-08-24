@@ -19,6 +19,7 @@ import { connectMongo } from "./utils/dbConnection.js";
 import { iniPassport } from "./utils/passport.config.js";
 import { connectSocketServer } from "./utils/socketServer.js";
 import { fakeProductsRouter } from "./routes/fakeProducts.router.js";
+import { loggerTest } from "./routes/logger-test.js";
 import errorHandler from "./middlewares/error.js"
 import { devLogger,prodLogger,addLogger } from "./utils/logger.js";
 
@@ -82,6 +83,7 @@ app.use("/api/ticket/" , ticketsRouter);
 app.use("/api/sessions", sessionsRouter);
 
 app.use("/", viewUsersRouter);
+app.use("/loggerTest",loggerTest)
 app.use("/products", viewProductsRouter);
 app.use("/carts", viewCartsRouter);
 app.use("/chat", chatsRouter);
