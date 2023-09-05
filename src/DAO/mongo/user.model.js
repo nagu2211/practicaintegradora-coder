@@ -40,7 +40,7 @@ class UserModel {
   }
   async findUserById(id) {
     let user = await UserModelMongoose.findById(id);
-    return user
+    return user;
   }
   async update({ _id, firstName, lastName, email }) {
     const userUpdated = await UserModelMongoose.updateOne(
@@ -55,20 +55,24 @@ class UserModel {
     );
     return userUpdated;
   }
+  async updatePassword(email, password) {
+    const userUpdated = await UserModelMongoose.updateOne({email},{password});
+    return userUpdated;
+  }
   async delete(_id) {
     const deleted = await UserModelMongoose.deleteOne({ _id: _id });
     return deleted;
   }
   async newUser(newUser) {
     let userCreated = await UserModelMongoose.create(newUser);
-    return userCreated
+    return userCreated;
   }
-  async updateOne(productInfo,newStock){
+  async updateOne(productInfo, newStock) {
     const updateProd = await ProdModelMongoose.updateOne(
       { _id: productInfo._id },
       { $set: { stock: newStock } }
-  );
-  return updateProd
+    );
+    return updateProd;
   }
 }
 

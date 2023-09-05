@@ -26,6 +26,10 @@ class UserService {
     const userUpdated = await userModel.update({ _id, firstName, lastName, email })
     return userUpdated;
   }
+  async updateOneResetPass(email,password) {
+    const userUpdated = await userModel.updatePassword(email,password)
+    return userUpdated;
+  }
   async deleteOne(_id) {
     const deleted = await userModel.delete(_id);
     return deleted;

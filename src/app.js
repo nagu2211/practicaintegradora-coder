@@ -94,4 +94,5 @@ app.get("*", (_, res) => {
     .status(404)
     .json({ status: "error", msg: "no se encuentra esa ruta", payload: {} });
   });
-  app.use(errorHandler)
+
+app.use(errorHandler)

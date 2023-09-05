@@ -1,5 +1,7 @@
 import CurrentDTO from "../DAO/DTO/current.dto.js";
 import { formatCurrentDate } from "../utils/currentDate.js";
+import { userService } from "../services/user.service.js";
+import { emailService } from "../services/email.service.js";
 class SessionsController {
    login = async (req, res) => {
     try {
@@ -49,6 +51,23 @@ class SessionsController {
         .status(500)
         .render("error-page", { msg: "unexpected error on the server" });
     }
+  }
+  forgotPassword = async (req, res) => {
+    try {
+      const {email} = req.body
+      const findUser = await userService.findUserByEmail(email)
+      if(findUser){
+        await emailService.sendResetPasswordForEmail(email)
+        res.status(200)
+        .render("success",{msg:"CHECK YOUR EMAIL : email sent to reset your password"} );
+      } else {
+        res.status(500)
+        .render("error-page", { msg: "user not found" });
+      }
+    } catch (error) {
+      
+    }
+    
   }
   githubCallback = (req, res) => {
     req.session.user = req.user;

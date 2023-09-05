@@ -1,66 +1,94 @@
-import { formatCurrentDate } from "../../src/utils/currentDate.js";
-import { PORT } from "../../src/app.js";
-import { devLogger,prodLogger } from "../../src/utils/logger.js";
+async function modal() {
+  await Swal.fire({
+    title: "Create new product",
+    html:`
+    <div class="containerForm" method="post" action="">
+    <form id="prodForm">
+        <input type="text" id="form-title" placeholder="Product title" required>
+        <input type="text" id="form-thumbnail" placeholder="Product thumbnail" required>
+        <input type="text" id="form-description" placeholder="Product description" required>
+        <input type="text" id="form-code" placeholder="Product code" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <input type="text" id="form-stock" placeholder="Product stock" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <input type="text" id="form-category" placeholder="Product category" required>
+        <input type="text" id="form-price" placeholder="Product price" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <button class="btnAdd" type="submit" id="form-btn-add">Add product</button>
+    </form>
+    </div>
+    `
+  });
+  emailIngresado = email;
+}
+
+
+
+window.addEventListener("beforeunload", function (event) {
+  const form = document.getElementById("formResetPassword");
+  if (form.checkValidity && !form.checkValidity()) {
+      event.preventDefault();
+      event.returnValue = ""; 
+  }
+});
+
+async function validateForm(event){
+  try{
+    event.preventDefault();
+    let newPass = document.getElementById("newPass").value;
+    let confirmPass = document.getElementById("confirmPass").value;
+
+    if (newPass !== confirmPass) {
+        alert("Passwords do not match. Please try again.");
+    } else { 
+      document.getElementById("formResetPassword").action = "/reset-password";
+      document.getElementById("formResetPassword").submit();
+    }
+  } catch(e) {
+    console.log(e)
+  }
+}
 
 async function getCurrentSession() {
   try {
-    const response = await fetch('/api/sessions/current', {
-      method: 'GET',
+    const response = await fetch("/api/sessions/current", {
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch current session');
+      throw new Error("Failed to fetch current session");
     }
 
     const sessionData = await response.json();
     const cartUser = sessionData?.payload?.cart;
     return cartUser;
   } catch (error) {
-    if(PORT == 8080){
-      devLogger.error('Error fetching current session: ', error)
-    } else {
-      prodLogger.error('Error fetching current session: ', error)
-    }
+    console.log(error);
   }
 }
 async function main(productId) {
   try {
     const cartId = await getCurrentSession();
-      const products = { products: { product: productId } };
-      fetch(`/api/carts/${cartId}/product/${productId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(products),
+    const products = { products: { product: productId } };
+    fetch(`/api/carts/${cartId}/product/${productId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(products),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Product added to cart: " + data);
       })
-        .then(response => response.json())
-        .then(data => {
-          if(PORT == 8080){
-            devLogger.info('Product added to cart: ' + data)
-          } else {
-            prodLogger.info('Product added to cart: ' + data)
-          }
-        })
-        .catch(error => {
-          if(PORT == 8080){
-            devLogger.error('error when adding product to cart: ', error)
-          } else {
-            prodLogger.error('error when adding product to cart: ', error)
-          }
-        });
-    
+      .catch((error) => {
+        console.log("error when adding product to cart: ", error);
+      });
   } catch (error) {
-    if(PORT == 8080){
-      devLogger.error('Error in main: ' + error)
-    } else {
-      prodLogger.error('Error in main: ' + error)
-    }
+    console.log("Error in main: " + error);
   }
 }
+
 /*
 
 

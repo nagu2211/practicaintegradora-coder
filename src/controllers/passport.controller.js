@@ -4,23 +4,37 @@ import fetch from "node-fetch";
 import { passportService } from "../services/passport.service.js";
 import RegisterDTO from "../DAO/DTO/register.dto.js";
 import { formatCurrentDate } from "../utils/currentDate.js";
+import { devLogger,prodLogger } from "../utils/logger.js";
+import { PORT } from "../app.js";
 class PassportController {
-    login=async (req,username, password, done) => {
-        try {
+    login=async (username, password, done) => {
+      try {
           const user = await passportService.findUser(username)
           
           if (!user) {
-            req.logger.error(`Failed login attempt for the user ${username} : user not found`)
+            if(PORT == 8080){
+              devLogger.warn(`Failed login attempt for the user ${username} : user not found`);
+            } else {
+              prodLogger.warn(`Failed login attempt for the user ${username} : user not found`)
+            }
             return done(null, false);
           }
           if (!isValidPassword(password, user.password)) {
-            req.logger.warn(`Failed login attempt for the user ${username} : invalid password`)
+            if(PORT == 8080){
+              devLogger.warn(`Failed login attempt for the user ${username} : invalid password`);
+            } else {
+              prodLogger.warn(`Failed login attempt for the user ${username} : invalid password`)
+            }
             return done(null, false);
           }
-
+          
           return done(null, user);
         } catch (err) {
-          req.logger.error(`Error during the login session : ${err.message} ` + formatCurrentDate)
+          if(PORT == 8080){
+            devLogger.error(`Error during the login session : ${err.message} ` + formatCurrentDate);
+          } else {
+            prodLogger.error(`Error during the login session : ${err.message} ` + formatCurrentDate)
+          }
           return done(err);
         }
       }
@@ -53,7 +67,7 @@ class PassportController {
           return done(e);
         }
       }
-      github=async (req,accesToken, _, profile, done) => {
+      github=async (accesToken, _, profile, done) => {
         try {
           const res = await fetch("https://api.github.com/user/emails", {
             headers: {
@@ -79,13 +93,21 @@ class PassportController {
               cart:''
             };
             let userCreated = await passportService.newUser(newUser)
-            req.logger.info("User Registration succesful")
+            if(PORT == 8080){
+              devLogger.info(`User Registration succesful`);
+            } else {
+              prodLogger.info(`User Registration succesful`)
+            }
             return done(null, userCreated);
           } else {
             return done(null, user);
           }
         } catch (e) {
-          req.logger.error(`Error when registering with github : ${e.message} ` + formatCurrentDate)
+          if(PORT == 8080){
+            devLogger.error(`Error when registering with github : ${e.message} ` + formatCurrentDate);
+          } else {
+            prodLogger.error(`Error when registering with github : ${e.message} ` + formatCurrentDate)
+          }
           return done(e);
         }
       }

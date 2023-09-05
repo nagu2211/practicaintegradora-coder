@@ -16,6 +16,8 @@ sessionsRouter.post(
   sessionsController.register
 );
 
+sessionsRouter.post("/forgotPassword", sessionsController.forgotPassword);
+
 sessionsRouter.get(
   "/github",
   passport.authenticate("github", { scope: ["user:email"] })

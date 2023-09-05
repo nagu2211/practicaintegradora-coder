@@ -5,7 +5,7 @@
     <a href="/logout"><button>LogOut</button></a>
   {{/if}}
   <h1>ALL PRODUCTS</h1>
-
+  <button onclick="modal()">create Product</button>
   <div class="all-products">
     {{#each productsView.prodsPaginated}}
       <div class="product">
@@ -35,5 +35,3 @@
 
   </div>
 </section>
-
-<script src="/js/index.js"></script>
