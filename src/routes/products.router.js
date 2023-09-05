@@ -1,6 +1,6 @@
 import express from "express";
 import { productsController } from "../controllers/products.controller.js";
-// import { } from "../utils/auth.js";
+
 
 
 export const productsRouter = express.Router();

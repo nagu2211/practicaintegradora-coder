@@ -2,10 +2,10 @@
   {{#if emailSession}}
 
     <h4>Hello, {{firstNameSession}}. Your role is {{roleSession}}</h4>
-    <a href="/logout"><button>LogOut</button></a>
+    <a href="/logout"><button class="btnDel">LogOut</button></a>
   {{/if}}
   <h1>ALL PRODUCTS</h1>
-  <button onclick="modal()">create Product</button>
+  <button class="btnAdd" onclick="modal()">create Product</button>
   <div class="all-products">
     {{#each productsView.prodsPaginated}}
       <div class="product">

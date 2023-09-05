@@ -1,25 +1,63 @@
 async function modal() {
-  await Swal.fire({
+  const {value : formValues } = await Swal.fire({
     title: "Create new product",
     html:`
-    <div class="containerForm" method="post" action="">
-    <form id="prodForm">
-        <input type="text" id="form-title" placeholder="Product title" required>
-        <input type="text" id="form-thumbnail" placeholder="Product thumbnail" required>
-        <input type="text" id="form-description" placeholder="Product description" required>
-        <input type="text" id="form-code" placeholder="Product code" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-        <input type="text" id="form-stock" placeholder="Product stock" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-        <input type="text" id="form-category" placeholder="Product category" required>
-        <input type="text" id="form-price" placeholder="Product price" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-        <button class="btnAdd" type="submit" id="form-btn-add">Add product</button>
+    <div class="containerForm" >
+    <form id="productForm" method="post" action="/api/products/" >
+        <input type="text" placeholder="Product title" name="title" required>
+        <input type="text" placeholder="Product description" name="description" required>
+        <input type="text" placeholder="Product code" name="code" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <input type="text" placeholder="Product price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <input type="text" placeholder="Product stock" name="stock" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <input type="text" placeholder="Product category" name="category" required>
+        <input type="text" placeholder="Product image" name="thumbnail" required>
     </form>
     </div>
-    `
+    `,
+    showDenyButton: true,
+    confirmButtonText: 'Add Product',
+    denyButtonText: `Cancel`,
+    preConfirm: () => {
+      const title = document.querySelector("#productForm input[name='title']").value;
+      const thumbnail = document.querySelector("#productForm input[name='thumbnail']").value;
+      const description = document.querySelector("#productForm input[name='description']").value;
+      const code = document.querySelector("#productForm input[name='code']").value;
+      const stock = document.querySelector("#productForm input[name='stock']").value;
+      const category = document.querySelector("#productForm input[name='category']").value;
+      const price = document.querySelector("#productForm input[name='price']").value;
+
+      return { title, thumbnail, description, code, stock, category, price };
+    }
   });
-  emailIngresado = email;
+  if (formValues) {
+    try {
+      const response = await fetch('/api/products/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formValues),
+      });
+
+      if (response.ok) {
+        Swal.fire(
+          'SUCCESS',
+          'Product added successfully',
+          'success'
+        )
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'failed to add product',
+        })
+      }
+    } catch (error) {
+      Swal.fire("Error occurred while adding product");
+      console.error(error);
+    }
+  }
 }
-
-
 
 window.addEventListener("beforeunload", function (event) {
   const form = document.getElementById("formResetPassword");

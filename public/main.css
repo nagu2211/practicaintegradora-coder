@@ -108,7 +108,7 @@ form input{
   font-size: 16px;
 }
 
-form .btnAdd{
+.btnAdd{
   padding: 15px;
   background: #24ae4d;
   color: #fff;
@@ -120,7 +120,7 @@ form .btnAdd{
   margin: 20px auto 0;
   border-radius: 30px;
 }
-form .btnDel{
+.btnDel{
   padding: 15px;
   background: #c02835;
   color: #fff;
