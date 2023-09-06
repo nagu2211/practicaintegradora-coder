@@ -50,6 +50,7 @@ async function modal() {
           icon: 'error',
           title: 'Oops...',
           text: 'failed to add product',
+          footer: 'you must be an admin to add a product'
         })
       }
     } catch (error) {

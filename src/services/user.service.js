@@ -18,6 +18,10 @@ class UserService {
     const found = await userModel.findByCart(cid);
     return found || false;
   }
+  async findUserById(uid) {
+    const found = await userModel.findById(uid);
+    return found;
+  }
   async login({ email }) {
     const found = await userModel.findUser(email)
     return found || false;
@@ -25,6 +29,15 @@ class UserService {
   async updateOne({ _id, firstName, lastName, email }) {
     const userUpdated = await userModel.update({ _id, firstName, lastName, email })
     return userUpdated;
+  }
+  async toggleUserRole(uid) {
+    const user = await this.findUserById(uid)
+    if (!user) {
+        return false
+      }
+    user.role = user.role === 'user' ? 'premium' : 'user';
+    await user.save();
+    return user.role;
   }
   async updateOneResetPass(email,password) {
     const userUpdated = await userModel.updatePassword(email,password)
@@ -34,6 +47,7 @@ class UserService {
     const deleted = await userModel.delete(_id);
     return deleted;
   }
+ 
 }
 
 export const userService = new UserService();

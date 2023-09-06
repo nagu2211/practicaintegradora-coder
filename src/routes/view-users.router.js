@@ -14,6 +14,9 @@ viewUsersRouter.get("/fail-register", viewUsersController.failRegister);
 
 viewUsersRouter.get("/fail-login", viewUsersController.failLogin);
 
-viewUsersRouter.get("/reset-password",viewUsersController.resetPassword)
+viewUsersRouter.get("/reset-password",viewUsersController.resetPassword);
 
-viewUsersRouter.post("/reset-password",viewUsersController.changePassword)
+viewUsersRouter.post("/reset-password",viewUsersController.changePassword);
+
+viewUsersRouter.post("/api/users/premium/:uid",viewUsersController.changeRole);
+

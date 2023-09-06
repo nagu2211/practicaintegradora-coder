@@ -53,8 +53,10 @@ class ProductsController {
   addProduct = async (req, res) => {
     try {
       const product = req.body;
+      const ownerEmail = req.session.user.email;
+      let ownerProduct = req.session.user.role == "admin" ? "admin" : ownerEmail;
       try{
-        const productDTO = new ProductDTO(product);
+        const productDTO = new ProductDTO(product,ownerProduct);
         const productAdded = await productService.addProduct(productDTO);
         if (productAdded == false) {
           return res.status(404).json({

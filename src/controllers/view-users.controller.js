@@ -52,7 +52,7 @@ class ViewUsersController {
   };
   resetPassword = async (req, res) => {
     const { code, email } = req.query;
-    const foundCode = await RecoverCodesModelMongoose.findOne({ code, email });
+    const foundCode = await recoverCodeService.findOne(code,email)
     if(foundCode && foundCode.expire > Date.now()){
       res.status(200).render("resetPassword", {code,email});
     } else {
@@ -65,9 +65,27 @@ class ViewUsersController {
     if(foundCode && foundCode.expire > Date.now()){
       password = createHash(password);
       const updatedUser = await userService.updateOneResetPass(email,password)
-      res.status(400).render("success",{msg:"your password was reset correctly"});
+      res.status(200).render("success",{msg:"your password was reset correctly"});
     } else {
       res.status(400).render("forgotPassword",{msg:"your code expired or is invalid"});
+    }
+  };
+  changeRole = async (req, res) => {
+    try {
+      const uid = req.params.uid
+      const toggleUserRole = await userService.toggleUserRole(uid);
+      if(!toggleUserRole){
+        return res
+      .status(404)
+      .render("error-page", { msg: "user not found" });
+      } else {
+        res.status(200).render("success",{msg:"your role was changed succesfully , role : " + toggleUserRole });
+      }
+    } catch (e) {
+      req.logger.error(`Error when trying to change the role ${e.message}` + formatCurrentDate)
+      return res
+      .status(500)
+      .render("error-page", { msg: "server error : it has not been possible to change the role of the user" });
     }
   };
 }

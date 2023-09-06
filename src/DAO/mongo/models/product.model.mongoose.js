@@ -10,6 +10,7 @@ const schema = new Schema({
   category: { type: String, required: true, max: 100 },
   thumbnail: { type: String, required: true },
   status: { type: Boolean, default: true },
+  owner: {type:String,default:"admin"}
 });
 schema.plugin(mongoosePaginate);
 export const ProdModelMongoose = model("products", schema);

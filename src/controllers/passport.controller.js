@@ -50,7 +50,7 @@ class PassportController {
           
           const newAdmin = {
             ...registerDTO,
-            role: "superadmin",
+            role: "admin",
           };
           if (
             register.email === env.adminEmail &&
