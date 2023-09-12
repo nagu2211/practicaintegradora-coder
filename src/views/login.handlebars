@@ -1,10 +1,63 @@
-<h1>login</h1>
-<p>please place a valid email so you get our purchase ticket to your email</p>
-<form action="/api/sessions/login" method="post">
-  <input type="email" name="email" placeholder="email" required/>
-  <input type="password" name="password" placeholder="password" required />
-  <button type="submit" class="btnAdd">login</button>
-  <a href="/forgot-password">forgot password</a>
-  <a href='/api/sessions/github'>login with github</a>
-  <a href="/register">dont have an account? Register</a>
-</form>
+<section class="section-login animate__animated animate__fadeIn">
+  <div class="vh-100 align-items-center d-flex justify-content-center">
+    <div class="container w-75 bg-dark rounded shadow">
+      <div class="row align-items-stretch">
+        <div
+          class="col bg-l-login-form d-none d-lg-block col-md-4 col-lg-5 col-xl-4 rounded"
+        >
+        </div>
+        <div class="col bg-white ps-3 rounded-end">
+          <div class="text-center">
+            <img src="/images/Fresh.png" width="150px" alt="logo" />
+          </div>
+
+          <form action="/api/sessions/login" method="post">
+            <div class="mb-4 dark">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" class="form-control" name="email" required />
+            </div>
+            <div class="mb-4 dark">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                required
+              />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Login</button>
+            </div>
+
+            <div class="my-3 dark">
+              <a href="/forgot-password" class="link-primary">Did you forget
+                your password?</a><br />
+              <span>Don't have an account?
+                <a href="/register">Register</a></span><br />
+            </div>
+          </form>
+
+          <div class="container w-100 my-5 align-items-center">
+            <div class="row text-center dark">
+                <button
+                  class="btn btn-outline-dark w-50 my-1 align-items-center"
+                >
+              <a href="/api/sessions/github">
+                  <div class="row align-items-center">
+                    <div class="col-2 d-none d-md-block">
+                      <i class="fa-brands fa-github"></i>
+                    </div>
+                    <div class="col-12 col-md-10 text-center">
+                      Login with Github
+                    </div>
+                  </div>
+              </a>
+                </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

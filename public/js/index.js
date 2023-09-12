@@ -1,3 +1,41 @@
+async function deleteProduct(productId){
+  fetch(`/api/products/${productId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .then((response) => {
+    if (response.status === 404) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Product not found',
+      });
+    } else if (response.status === 401) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'unauthorized user',
+      });
+    }  else if (response.ok) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'product deleted',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'An error occurred while deleting the product.',
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
 async function modal() {
   const {value : formValues } = await Swal.fire({
     title: "Create new product",
@@ -93,7 +131,7 @@ async function getCurrentSession() {
         "Content-Type": "application/json",
       },
     });
-
+    
     if (!response.ok) {
       throw new Error("Failed to fetch current session");
     }
@@ -116,13 +154,30 @@ async function main(productId) {
       },
       body: JSON.stringify(products),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Product added to cart: " + data);
-      })
-      .catch((error) => {
-        console.log("error when adding product to cart: ", error);
-      });
+    .then((response) => {
+      if (response.status === 409) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'you cannot add your product to your cart',
+        });
+      } else if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'product added to cart',
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'An error occurred while adding the product.',
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   } catch (error) {
     console.log("Error in main: " + error);
   }

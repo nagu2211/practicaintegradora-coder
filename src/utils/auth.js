@@ -9,13 +9,13 @@ export function checkAdmin(req, res, next) {
 	if (req.session?.user?.email && req.session?.user?.role == "admin") {
 		return next();
 	} else {
-		return res.status(401).render("error-page",{msg:"please log in as admin"});
+		return res.status(401).render("error-page",{msg:"please login as admin"});
 	}
 }
 export function checkPremium(req, res, next) {
 	if (req.session?.user?.role == "premium" || req.session?.user?.role == "admin") {
 		return next();
 	} else {
-		return res.status(401).render("error-page",{msg:"please log in as premium"});
+		return res.status(401).render("error-page",{msg:"please login as premium"});
 	}
 }

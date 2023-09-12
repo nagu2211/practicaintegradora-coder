@@ -1,11 +1,73 @@
-<h1>register</h1>
-<p>please place a valid email so you get our purchase ticket to your email</p>
-<form action="/api/sessions/register" method="post">
-  <input type="text" name="firstName" placeholder="first name"/>
-  <input type="text" name="lastName" placeholder="last name" />
-  <input type="number" name="age" placeholder="age" max="99" />
-  <input type="email" name="email" placeholder="email" />
-  <input type="password" name="password" placeholder="password" />
-  <button type="submit" class="btnAdd">register</button>
-  <a href="/">I already have an account, login</a>
-</form>
+<section class="section-register animate__animated animate__fadeIn">
+  <div class="vh-100 align-items-center d-flex justify-content-center">
+    <div class="container w-75 bg-dark rounded shadow">
+      <div class="row align-items-stretch">
+        <div
+          class="col bg-l-register-form d-none d-lg-block col-md-4 col-lg-5 col-xl-4 rounded"
+        >
+        </div>
+        <div class="col bg-white ps-3 rounded-end">
+          <div class="text-center">
+            <img src="/images/Fresh.png" width="100px" alt="logo" />
+          </div>
+
+          <form action="/api/sessions/register" method="post">
+          <div class="mb-2 dark">
+              <label for="firstName" class="form-label">First name:</label>
+              <input type="text" class="form-control" name="firstName" required />
+            </div>
+            <div class="mb-2 dark">
+              <label for="lastName" class="form-label">Last name:</label>
+              <input type="text" class="form-control" name="lastName" required />
+            </div>
+            <div class="mb-2 dark">
+              <label for="age" class="form-label">Age:</label>
+              <input type="number" class="form-control" name="age" max="99" required/>
+            </div>
+            <div class="mb-2 dark">
+              <label for="email" class="form-label">Email address:</label>
+              <input type="email" class="form-control" name="email" required />
+            </div>
+            <div class="mb-2 dark">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                required
+              />
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+
+            <div class="my-3 dark">
+              <span>I already have an account
+                <a href="/login">Login</a></span><br />
+            </div>
+          </form>
+
+          <div class="container w-100 my-5 align-items-center">
+            <div class="row text-center dark">
+                <button
+                  class="btn btn-outline-dark w-50 my-1 align-items-center"
+                >
+              <a href="/api/sessions/github">
+                  <div class="row align-items-center">
+                    <div class="col-2 d-none d-md-block">
+                      <i class="fa-brands fa-github"></i>
+                    </div>
+                    <div class="col-12 col-md-10 text-center">
+                      Login with Github
+                    </div>
+                  </div>
+              </a>
+                </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -59,7 +59,7 @@ class ProductsController {
         const productDTO = new ProductDTO(product,ownerProduct);
         const productAdded = await productService.addProduct(productDTO);
         if (productAdded == false) {
-          return res.status(404).json({
+          return res.status(409).json({
             status: "error",
             msg: "Not added: the product is repeated",
             payload: {},
@@ -123,27 +123,21 @@ class ProductsController {
   deleteProduct =  async (req, res) => {
     try {
       const _id = req.params._id;
-      const deleted = await productService.deleteOne(_id);
-      if (deleted?.deletedCount > 0) {
-        return res.status(200).json({
-          status: "success",
-          msg: "product deleted",
-          payload: {},
-        });
+      const foundProduct = await productService.getProductById(_id)
+      if(foundProduct.owner == req.session.user.email || foundProduct.owner == "admin"){
+        const deleted = await productService.deleteOne(_id);
+        if (deleted?.deletedCount > 0) {
+          return res.status(200).render("success",{msg:"product deleted"})
+        } else {
+          return res.status(404).render("error-page",{msg:"product not found"})
+        }
       } else {
-        return res.status(404).json({
-          status: "error",
-          msg: "Product not found",
-          payload: {},
-        });
+        return res.status(401).render("error-page",{msg:"unauthorized user"})
       }
+     
     } catch (e) {
       req.logger.error(`Error in deleteProduct : ${e.message}` + formatCurrentDate)
-      return res.status(500).json({
-        status: "error",
-        msg: "something went wrong :(",
-        payload: {},
-      });
+      return res.status(500).render("error-page",{msg:"something went wrong in the server"})
     }
   }
 }

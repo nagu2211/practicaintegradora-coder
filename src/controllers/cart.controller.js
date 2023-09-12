@@ -1,4 +1,5 @@
 import { cartService } from "../services/cart.service.js";
+import { productService } from "../services/product.service.js";
 import { ticketService } from "../services/ticket.service.js";
 import { formatCurrentDate } from "../utils/currentDate.js";
 class CartController {
@@ -57,13 +58,24 @@ class CartController {
   addProductToCart = async (req, res) => {
     try {
       let { cid, pid } = req.params;
-      const cart = await cartService.addProductToCart(cid, pid);
+      const productFound = await productService.getProductById(pid)
+      if(productFound.owner == req.session.user.email){
+        return res.status(409).json({
+          status: "error",
+          msg: "you cannot add your product to your cart",
+          payload: {},
+        });
+        
+      } else{
+        const cart = await cartService.addProductToCart(cid, pid);
 
-      return res.status(200).json({
-        status: "success",
-        msg: "product added to cart",
-        payload: cart,
-      });
+        return res.status(200).json({
+          status: "success",
+          msg: "product added to cart",
+          payload: cart,
+        });
+      }
+      
     } catch (e) {
       req.logger.error(`Error in addProductToCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({

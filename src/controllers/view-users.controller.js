@@ -4,6 +4,18 @@ import { userService } from "../services/user.service.js";
 import { createHash } from "../utils/bcrypt.js";
 import { formatCurrentDate } from "../utils/currentDate.js";
 class ViewUsersController {
+  home = async (req, res) => {
+    try {
+      return res.status(200).render("home");
+    } catch (e) {
+      req.logger.error(
+        `Error in home : ${e.message}` + formatCurrentDate
+      );
+      return res
+        .status(500)
+        .render("error-page", { msg: "unexpected error on the server" });
+    }
+  };
   login = async (req, res) => {
     try {
       return res.status(200).render("login");
