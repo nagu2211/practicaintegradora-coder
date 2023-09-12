@@ -22,6 +22,8 @@ import { fakeProductsRouter } from "./routes/fakeProducts.router.js";
 import { loggerTest } from "./routes/logger-test.js";
 import errorHandler from "./middlewares/error.js"
 import { devLogger,prodLogger,addLogger } from "./utils/logger.js";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUiExpress from "swagger-ui-express";
 
 export const PORT = env.port;
 
@@ -77,6 +79,17 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 app.use(express.static("public"));
 
+const specs = swaggerJSDoc({
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Docs of Always Fresh",
+      description: 'these documents are from the "always fresh" fruit and vegetable supermarket page',
+    },
+  },
+  apis: [`${__dirname}/docs/**/*.yaml`],
+});
+app.use("/api/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use("/api/carts/", cartsRouter);
 app.use("/api/products/", productsRouter);
 app.use("/api/ticket/" , ticketsRouter);
