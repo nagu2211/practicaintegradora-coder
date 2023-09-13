@@ -108,18 +108,6 @@ paths:
           description: Error on the server. Usually generating query or connection to DB                  
 components:
   schemas:
-    Success:
-      type: object
-      properties:
-        status:
-          type: String
-          description: success or error
-        message:
-          type: String
-          description: aclarando que ocurrio
-      example:
-        status: success
-        message: User updated
     ProductUpdate:
       type: object
       properties:

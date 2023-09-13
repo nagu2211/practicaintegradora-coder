@@ -59,7 +59,7 @@ class CartController {
     try {
       let { cid, pid } = req.params;
       const productFound = await productService.getProductById(pid)
-      if(productFound.owner == req.session.user.email){
+      if(req.session?.user?.email && productFound.owner == req.session.user.email){
         return res.status(409).json({
           status: "error",
           msg: "you cannot add your product to your cart",

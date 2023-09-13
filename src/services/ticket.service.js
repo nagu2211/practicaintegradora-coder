@@ -6,6 +6,9 @@ import { userService } from "./user.service.js";
 import { userModel } from "../DAO/mongo/user.model.js";
 import { emailService } from "./email.service.js";
 import { formatCurrentDate } from "../utils/currentDate.js";
+import { PORT } from "../app.js";
+import { devLogger,prodLogger } from "../utils/logger.js";
+
 class TicketService {
   async generateUniqueCode() {
     let uniqueCode = nanoid();
@@ -51,7 +54,7 @@ class TicketService {
       const sendEmail = await emailService.sendTicketForEmail(ticket,userCart)
       return ticket
   }
-  async finalizarCompra(req,cid, productsToUpdate, productsNotStock,userCart) {
+  async finalizarCompra(cid, productsToUpdate, productsNotStock,userCart) {
     try {
       const uniqueCode = await this.generateUniqueCode();
       const cart = await cartService.getOneCartById(cid);
@@ -69,7 +72,6 @@ class TicketService {
 
         return total;
       }
-
       const total = calculateTotal(productsToUpdate);
       const newTicket = TicketModelMongoose.create({
         code: uniqueCode,
@@ -81,7 +83,11 @@ class TicketService {
 
       return newTicket;
     } catch (error) {
-      req.logger.error("Error during checkout" + error)
+      if(PORT==8080){
+        devLogger.error("Error during checkout" + error + formatCurrentDate);
+      } else {
+        prodLogger.error("Error during checkout" + error + formatCurrentDate);
+      }
     }
   }
   async getTicketById(cid){
