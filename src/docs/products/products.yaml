@@ -1,121 +1,75 @@
 paths:
-  /api/users:
+  /api/products:
     get:
-      summary: Obtiene todos los usuarios
+      summary: Get all products
       tags:
-        - Users
+        - Products
       responses:
         "200":
-          description: Los usuarios fueron devueltos satisfactoriamente
+          description: Products were returned successfully
           content:
             application/json:
               schema:
-                type: array
                 items:
-                  $ref: "#components/schemas/User"
+                  $ref: "#/components/schemas/ProductResponse"
         "500":
-          description: Error del servidor. Usualmente generando la query o falla la conexion a la DB
-  /api/users/{uid}:
-    get:
-      summary: Obtiene un user
-      tags:
-        - Users
-      parameters:
-        - name: uid
-          in: path
-          required: true
-          description: ID del usuario que se busca
-          schema:
-            $type: String
-      responses:
-        "200":
-          description: Usuario encontrado
-          content:
-            application/json:
-              schema:
-                $ref: "#components/schemas/User"
-    put:
-      summary: Actualizar un user a partir del ID
-      tags:
-        - Users
-      parameters:
-        - name: uid
-          in: path
-          required: true
-          description: ID del usuario que se busca
-          schema:
-            $type: String
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#components/requestBodies/updateUser"
-      responses:
-        "200":
-          description: Usuario modificado exitosamente
-          content:
-            application/json:
-              schema:
-                $ref: "#components/schemas/Success"
+          description: Error on the server. Usually generating query or fail connection db
+  
 components:
   schemas:
-    Success:
+    ProductResponse:
       type: object
       properties:
         status:
-          type: String
-          description: success or error
-        message:
-          type: String
-          description: aclarando que ocurrio
-      example:
-        status: success
-        message: User updated
-    User:
+          type: string
+          description: Estado de la respuesta
+        msg:
+          type: string
+          description: Mensaje de la respuesta
+        payload:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
+    ProductResponseExample:
+      status: "success"
+      msg: "all products"
+      payload:
+        $ref: "#/components/examples/ProductExample"
+    Product:
       type: object
       properties:
         _id:
-          type: ObjectId
-          description: ID auto generado by mongo
-        first_name:
-          type: String
+          type: string
+          description: ID auto generado por Mongo
+        title:
+          type: string
           description: Primer nombre
-        last_name:
-          type: String
-          description: Apellido
-        email:
-          type: String
-          description: Email de usuario
-        password:
-          type: String
-          description: Password hasheado del user
-      example:
-        _id: ObjectId("644081a93f0625dc193bc594")
-        first_name: Adrian
-        last_name: Campo
-        email: atrian@gmail.com
-        password: $2b$10$Cf.uErjQ/lEzypTNfyE1IuFGxVXSRqGzjFWBYwL9KLK4Fe29kvu.e
-  requestBodies:
-    updateUser:
-      type: object
-      properties:
-        first_name:
-          type: String
-          description: Primer nombre
-        last_name:
-          type: String
-          description: Apellido
-        email:
-          type: String
-          description: Email de usuario
-        password:
-          type: String
-          description: Password hasheado del user
-      example:
-        first_name: Adrian
-        last_name: Campo
-        email: atrian@gmail.com
-        password: $2b$10$Cf.uErjQ/lEzypTNfyE1IuFGxVXSRqGzjFWBYwL9KLK4Fe29kvu.e
-
+        description:
+          type: string
+          description: Descripción del producto
+        code:
+          type: number
+          description: Código del producto
+        price:
+          type: number
+          description: Precio del producto
+        stock:
+          type: number
+          description: Cantidad en stock del producto
+        category:
+          type: string
+          description: Categoría del producto
+        thumbnail:
+          type: string
+          description: URL de la imagen del producto
+    ProductExample:
+      _id: "6488f0384ad256525b19b4c0"
+      title: Orange
+      description: rich , sweet and full of vitamin C
+      code: 789
+      price: 450
+      stock: 136
+      category: fruit
+      thumbnail: https://s3.ppllstatics.com/elcorreo/www/multimedia/201902/08/media/cortadas/GF0N1J31-U401131236871ktC-U70573831277euB-624x385@El%20Correo-ElCorreo.jpg
+    
 
