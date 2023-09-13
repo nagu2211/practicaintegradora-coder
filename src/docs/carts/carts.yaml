@@ -1,0 +1,262 @@
+paths:
+  /api/carts:
+    get:
+      summary: Get all carts
+      tags:
+        - Carts
+      responses:
+        "200":
+          description: Carts were returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/Cart"
+        "500":
+          description: Error on the server. Usually generating query or connection to DB
+    post:
+      summary: Create cart
+      tags:
+        - Carts
+      responses:
+        "201":
+          description: Cart created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#components/schemas/CartCreated"          
+        "500":
+          description: Error on the server. Usually generating query or connection to DB
+  /api/carts/{_id}:
+    get:
+      summary: Get one cart
+      tags:
+        - Carts
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: ID of the cart being searched
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Cart found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "404":
+          description: Cart not found
+        "500":
+          description: Error on the server. Usually generating query or connection to DB                
+    put:
+      summary: Update a cart from ID
+      tags:
+        - Carts
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: ID from cart to update
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateCart"
+      responses:
+        "200":
+          description: Cart update successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/CartUpdate" 
+        "500":
+          description: Error on the server. Usually generating query or connection to DB                  
+  /api/carts/{cid}:
+    delete:
+      summary: Clear a cart from ID
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID from cart to clear
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: The cart has been cleared  
+        "500":
+          description: Error on the server. Usually generating query or connection to DB
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Add product to cart from cid & pid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID from cart to add product
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product to add to cart
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product added to cart
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "409":
+          description: You can't add your own product to cart
+        "500":
+          description: Error on the server. Usually generating query or connection to DB
+    delete:
+      summary: delete product from cart with cid & pid
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID from cart to delete product
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          description: ID of the product to delete of cart
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product removed from the cart
+        "500":
+          description: Error on the server. Usually generating query or connection to DB
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Complete purchase from the cart
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID of the cart you want to complete the purchase
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Product added to cart
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/Cart"
+        "409":
+          description: You can't add your own product to cart
+        "500":
+          description: Error on the server. Usually generating query or connection to DB
+components:
+  schemas:
+    ProductUpdate:
+      type: object
+      properties:
+        stock:
+          type: Number
+          description: Item you want to update
+      example:
+        stock: 50
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID of the cart auto generated by mongo
+        products:
+          type: array
+          description: Products inside the cart
+          items:
+              type: object
+              properties:
+                product:
+                  type: ObjectId
+                  description: ID of the product auto generated by mongo
+                quantity: 
+                  type: Number
+                  description: Quantity of product inside the cart 
+      example:
+        _id: "644081a93f0625dc193bc594"
+        products: 
+          - product: "64c1b18f53fa01983d8c4e93"
+            quantity: 2 
+    CartCreated:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID of the cart auto generated by mongo
+        products:
+          type: array
+          description: Cart empty
+      example:
+        _id: "644081a93f0625dc193bc594"
+        products: []
+    CartUpdate:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: Cart ID that was updated  
+        products:
+          type: array
+          description: The new updated product array
+          items:
+              type: object
+              properties:
+                quantity: 
+                  type: Number
+                  description: Updated product quantity
+                product:
+                  type: ObjectId
+                  description: Updated Product ID
+      example:
+        _id: "644081a93f0625dc193bc594"
+        products: 
+          - product: "64c1b18f53fa01983d8c4e93"
+            quantity: 5                    
+  requestBodies:
+    updateCart:
+      type: object
+      properties:
+        products:
+          type: array
+          description: Products in the cart you want to update
+          items:
+              type: object
+              properties:
+                _id:
+                  type: ObjectId
+                  description: ID of the product you want to update
+                quantity: 
+                  type: Number
+                  description: Quantity of product you want to update
+      example:
+        products :
+          - _id : "64c1b18f53fa01983d8c4e93"
+            quantity: 5
+
+

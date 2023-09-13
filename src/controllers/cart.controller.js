@@ -106,9 +106,9 @@ class CartController {
   };
   updateCart = async (req, res) => {
     try {
-      const { cid } = req.params;
+      const { _id } = req.params;
       const { products } = req.body;
-      const cart = await cartService.updateCart(cid, products);
+      const cart = await cartService.updateCart(_id, products);
 
       return res
         .status(200)

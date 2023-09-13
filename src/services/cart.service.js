@@ -37,7 +37,7 @@ class CartService {
   
   return cart;
   }
-   async addProductToCart(cid, pid) {
+  async addProductToCart(cid, pid) {
     const cartFound = await cartModel.findById(cid);
     
     if (cartFound) {
@@ -64,9 +64,9 @@ class CartService {
       throw new Error("error removing product from cart");
     }
   }
-  async updateCart(cid, products) {
+  async updateCart(_id, products) {
     try {
-      const cart = await cartModel.findByIdAndUpdate(cid,products)
+      const cart = await cartModel.findByIdAndUpdate(_id,products)
       return cart;
     } catch (error) {
       throw new Error("Error updating cart in database");

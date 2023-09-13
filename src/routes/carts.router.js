@@ -10,13 +10,13 @@ cartsRouter.post("/", cartController.newCart);
 
 cartsRouter.get("/:_id", cartController.getOneCart);
 
+cartsRouter.put("/:_id", cartController.updateCart);
+
+cartsRouter.delete("/:cid", cartController.clearCart);
+
 cartsRouter.post("/:cid/product/:pid", cartController.addProductToCart);
 
 cartsRouter.delete("/:cid/product/:pid", cartController.removeProduct);
-
-cartsRouter.put("/:cid", cartController.updateCart);
-
-cartsRouter.delete("/:cid", cartController.clearCart);
 
 cartsRouter.put("/:cid/product/:pid",cartController.addProductToCart)
 
