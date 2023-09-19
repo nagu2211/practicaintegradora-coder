@@ -42,7 +42,7 @@ class CartController {
       const { _id } = req.params;
       const cart = await cartService.getOneCart(_id);
       return res.status(200).json({
-        status: "succes",
+        status: "success",
         msg: "cart found",
         payload: cart,
       });
@@ -94,7 +94,7 @@ class CartController {
 
       return res
         .status(200)
-        .json({ status: "succes", message: "product removed from cart" });
+        .json({ status: "success", message: "product removed from cart" });
     } catch (e) {
       req.logger.error(`Error in removeProduct : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
@@ -112,7 +112,7 @@ class CartController {
 
       return res
         .status(200)
-        .json({ status: "succes", message: "cart updated succesfully", cart });
+        .json({ status: "succes", message: "cart updated successfully", cart });
     } catch (e) {
       req.logger.error(`Error in updateCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
@@ -144,7 +144,7 @@ class CartController {
 
       return res
         .status(200)
-        .json({ status: "succes", message: "the cart has been cleared" });
+        .json({ status: "success", message: "the cart has been cleared" });
     } catch (e) {
       req.logger.error(`Error in clearCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({

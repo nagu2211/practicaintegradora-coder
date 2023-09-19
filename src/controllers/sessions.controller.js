@@ -44,7 +44,7 @@ class SessionsController {
         cart: req.user.cart,
       };
 
-      return res.redirect("/products");
+      return res.status(200).redirect("/products");
     } catch (e) {
       req.logger.error(`Error in registerSession : ${e.message}` + formatCurrentDate)
       return res
@@ -78,7 +78,7 @@ class SessionsController {
     const userDTO = new CurrentDTO(user)
  
     return res.status(200).json({
-      status: "succes",
+      status: "success",
       msg: "current user",
       payload: userDTO,
     });

@@ -68,7 +68,7 @@ class ProductsController {
           return res.status(201).json({
             status: "success",
             msg: "product added",
-            payload: {},
+            payload: productAdded,
           });
         }
       } catch(e){

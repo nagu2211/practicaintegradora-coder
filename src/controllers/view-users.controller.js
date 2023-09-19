@@ -91,7 +91,7 @@ class ViewUsersController {
       .status(404)
       .render("error-page", { msg: "user not found" });
       } else {
-        res.status(200).render("success",{msg:"your role was changed succesfully , role : " + toggleUserRole });
+        res.status(200).render("success",{msg:"your role was changed successfully , role : " + toggleUserRole });
       }
     } catch (e) {
       req.logger.error(`Error when trying to change the role ${e.message}` + formatCurrentDate)
