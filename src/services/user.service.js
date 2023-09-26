@@ -30,6 +30,10 @@ class UserService {
     const userUpdated = await userModel.update({ _id, firstName, lastName, email })
     return userUpdated;
   }
+  async updateLastConnection(email) {
+    const userUpdated = await userModel.updateLastConnection(email)
+    return userUpdated;
+  }
   async toggleUserRole(uid) {
     const user = await this.findUserById(uid)
     if (!user) {

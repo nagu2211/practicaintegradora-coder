@@ -78,6 +78,19 @@ class UserModel {
     );
     return updateProd;
   }
+  async updateLastConnection(email) {
+    try {
+      const updateUser = await UserModelMongoose.updateOne(
+        { email: email},
+        { $set: { last_connection : Date.now() } },
+        );
+      return updateUser;
+    } catch (error) {
+      console.error(`Error en la actualización de la última conexión: ${error.message}`);
+    throw error;
+    }
+    
+  }
 }
 
 export const userModel = new UserModel();

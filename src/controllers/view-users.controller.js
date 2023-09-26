@@ -1,4 +1,3 @@
-import { RecoverCodesModelMongoose } from "../DAO/mongo/models/recover-codes.model.mongoose.js";
 import { recoverCodeService } from "../services/recoverCode.service.js";
 import { userService } from "../services/user.service.js";
 import { createHash } from "../utils/bcrypt.js";
@@ -40,7 +39,10 @@ class ViewUsersController {
         .render("error-page", { msg: "unexpected error on the server" });
     }
   };
-  logout = (req, res) => {
+  logout = async (req, res) => {
+    const email = req.session.user.email
+    const updateCon = await userService.updateLastConnection(email)
+    
     req.session.destroy((err) => {
       if (err) {
         req.logger.error(
@@ -57,7 +59,7 @@ class ViewUsersController {
       .render("error-page", { msg: "failure to register the user" });
   };
   failLogin = async (_, res) => {
-    return res.status(401).render("error-page", { msg: "user not found" });
+    return res.status(401).render("error-page", { msg: "password or invalid user" });
   };
   forgotPassword = async (_, res) => {
     return res.status(200).render("forgotPassword");

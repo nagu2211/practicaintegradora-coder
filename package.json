@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node ./src/app.js --mode PRODUCTION",
     "dev": "nodemon -e yaml,js ./src/app.js --mode DEVELOPMENT",
-    "test": "mocha ./test/supertest.test.js"
+    "test": "mocha ./test/main.test.js"
   },
   "keywords": [],
   "author": "",

@@ -115,7 +115,7 @@ async function validateForm(event){
     if (newPass !== confirmPass) {
         alert("Passwords do not match. Please try again.");
     } else { 
-      document.getElementById("formResetPassword").action = "/reset-password";
+      document.getElementById("formResetPassword").action = "/api/users/reset-password";
       document.getElementById("formResetPassword").submit();
     }
   } catch(e) {

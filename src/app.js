@@ -24,6 +24,7 @@ import { connectMongo } from './utils/dbConnection.js';
 import { addLogger, devLogger, prodLogger } from './utils/logger.js';
 import { iniPassport } from './utils/passport.config.js';
 import { connectSocketServer } from './utils/socketServer.js';
+import { usersRouter } from './routes/users.router.js';
 
 export const PORT = env.port;
 
@@ -92,6 +93,8 @@ app.use('/api/carts/', cartsRouter);
 app.use('/api/products/', productsRouter);
 app.use('/api/ticket/', ticketsRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/users', usersRouter);
+
 
 app.use('/', viewUsersRouter);
 app.use('/loggerTest', loggerTest);
