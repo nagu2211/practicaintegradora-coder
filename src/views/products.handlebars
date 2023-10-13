@@ -1,37 +1,38 @@
-<div class="userNav">
-    {{#if emailSession}}
-      <p>Hello, {{firstNameSession}}. Your role is {{roleSession}}
-      <a href="/logout"><button class="btn btn-danger">
-          <i class="fa-solid fa-right-from-bracket"></i></button></a></p>
-    {{/if}}
-  </div>
-<nav class="navbar">
-  <div class="logo">
-    <img src="./images/FreshBgn't.png" alt="">
+<div class='userNav'>
+  {{#if emailSession}}
+    <p>Hello,
+      {{firstNameSession}}. Your role is
+      {{roleSession}}
+      <a href='/logout'><button class='btn btn-danger'>
+          <i class='fa-solid fa-right-from-bracket'></i></button></a></p>
+  {{/if}}
+  {{#if isAdmin}}
+    <a href='/api/users'><button>ADMINISTRAR</button></a>
+  {{/if}}
+</div>
+<nav class='navbar'>
+  <div class='logo'>
+    <img src="./images/FreshBgn't.png" alt='' />
   </div>
 </nav>
 
-<section class="products">
-<button class="btnAdd" onclick="modal()">create Product</button>
-  <div class="all-products">
+<section class='products'>
+  <button class='btnAdd' onclick='modal()'>create Product</button>
+  <div class='all-products'>
     {{#each productsView.prodsPaginated}}
-      <div class="product animate__animated animate__pulse">
+      <div class='product animate__animated animate__pulse'>
 
-        <div class="card" style="width: 18rem;">
-          <img
-            src={{this.thumbnail}}
-            class="card-img-top img-product"
-            alt="img-product"
-          />
-          <div class="card-body">
-            <h5 class="card-title">{{this.title}}</h5>
-            <p class="card-text"><span>price
-                <i class="fa-solid fa-arrow-down"></i></span><br
-              />${{this.price}}(ARS)/k</p>
-            <a href="/products/{{this._id}}" class="btn btn-primary">Details</a>
-            <button class="btn btn-success" onclick="main('{{this._id}}')">Add
-              to Cart</button>
-            {{!-- <button class="btn btn-danger" onclick="deleteProduct('{{this._id}}')">Delete Product</button> --}}
+        <div class='card' style='width: 18rem;'>
+          <img src={{this.thumbnail}} class='card-img-top img-product' alt='img-product' />
+          <div class='card-body'>
+            <h5 class='card-title'>{{this.title}}</h5>
+            <p class='card-text'><span>price
+                <i class='fa-solid fa-arrow-down'></i></span><br />${{this.price}}(ARS)/k</p>
+            <a href='/products/{{this._id}}' class='btn btn-primary'>Details</a>
+            <button class='btn btn-success' onclick="main('{{this._id}}')">Add to Cart</button>
+            {{#if ../isAdmin}}
+              <button class='btn btn-danger' onclick="deleteProduct('{{this._id}}')">Delete Product</button>
+            {{/if}}
           </div>
         </div>
       </div>
@@ -40,18 +41,14 @@
   <h3>pagination</h3>
   <div>
     {{#if productsView.hasPrevPage}}
-      <a
-        href="/products?querypage={{productsView.prevPage}}&limit={{productsView.limit}}"
-      >⬅️</a>
+      <a href='/products?querypage={{productsView.prevPage}}&limit={{productsView.limit}}'>⬅️</a>
     {{/if}}
     page
     {{productsView.page}}
     of
     {{productsView.totalPages}}
     {{#if productsView.hasNextPage}}
-      <a
-        href="/products?querypage={{productsView.nextPage}}&limit={{productsView.limit}}"
-      >➡️</a>
+      <a href='/products?querypage={{productsView.nextPage}}&limit={{productsView.limit}}'>➡️</a>
     {{/if}}
 
   </div>

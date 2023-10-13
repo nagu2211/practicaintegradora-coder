@@ -1,17 +1,17 @@
-import { __dirname } from "../config.js";
-import { transportNodemailer } from "../app.js";
-import env from "../config/environment.config.js";
-import { randomBytes } from "crypto";
-import environmentConfig from "../config/environment.config.js";
-import { RecoverCodesModelMongoose } from "../DAO/mongo/models/recover-codes.model.mongoose.js";
-import { recoverCodeService } from "./recoverCode.service.js";
+import { __dirname } from '../config.js';
+import { transportNodemailer } from '../app.js';
+import env from '../config/environment.config.js';
+import { randomBytes } from 'crypto';
+import environmentConfig from '../config/environment.config.js';
+import { RecoverCodesModelMongoose } from '../DAO/mongo/models/recover-codes.model.mongoose.js';
+import { recoverCodeService } from './recoverCode.service.js';
 
 class EmailService {
   async sendTicketForEmail(ticket, userCart) {
     const result = await transportNodemailer.sendMail({
-      from: " Correo Test Backend <" + env.googleEmail + ">",
+      from: ' Correo Test Backend <' + env.googleEmail + '>',
       to: userCart.email,
-      subject: "Ticket de compra",
+      subject: 'Ticket de compra',
       html: `
         <div>
         <h1>Ticket de compra</h1>
@@ -19,16 +19,9 @@ class EmailService {
         <p>codigo de su ticket (no lo pierda) : ${ticket.code}</p>
         <p>productos adquiridos :</p>
         <ul>
-           ${ticket.products_purchased
-             .map(
-               (item) =>
-                 ` <li><strong>${item.title}</strong>: ${item.quantity}</li>`
-             )
-             .join("")}
+           ${ticket.products_purchased.map((item) => ` <li><strong>${item.title}</strong>: ${item.quantity}</li>`).join('')}
         </ul>
-         <p> productos no adquiridos por falta de stock : ${
-           ticket.products_not_purchased
-         }</p>
+         <p> productos no adquiridos por falta de stock : ${ticket.products_not_purchased}</p>
         
         <p>Total: $${ticket.amount}</p>
         <p>hora y fecha de compra : ${ticket.purchase_datetime.toLocaleString()}</p>
@@ -36,9 +29,9 @@ class EmailService {
                       `,
       attachments: [
         {
-          filename: "giphy.gif",
-          path: __dirname + "/images/giphy.gif",
-          cid: "giphy",
+          filename: 'giphy.gif',
+          path: __dirname + '/images/giphy.gif',
+          cid: 'giphy',
         },
       ],
     });
@@ -46,12 +39,12 @@ class EmailService {
   async sendResetPasswordForEmail(email) {
     const code = randomBytes(20).toString('hex');
     const expire = Date.now() + 3600000;
-    const codeSaved = await recoverCodeService.createCode(email,code,expire)
-    
+    const codeSaved = await recoverCodeService.createCode(email, code, expire);
+
     const result = await transportNodemailer.sendMail({
-      from: " Correo Test Backend <" + env.googleEmail + ">",
+      from: ' Correo Test Backend <' + env.googleEmail + '>',
       to: email,
-      subject: "Reset Password",
+      subject: 'Reset Password',
       html: `
         <div>
         <p>We heard that you lost your password. Sorry about that!</p>
@@ -62,6 +55,16 @@ class EmailService {
       </div>
       `,
     });
+  }
+  async emailSentDueToInactivity(inactiveUsers) {
+    for (const user of inactiveUsers) {
+      const result = await transportNodemailer.sendMail({
+        from: ' Correo Test Backend <' + env.googleEmail + '>',
+        to: user.email,
+        subject: 'Your account has been deleted due to inactivity',
+        text: 'Your account has been deleted due to inactivity in our system.',
+      });
+    }
   }
 }
 

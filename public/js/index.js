@@ -1,3 +1,73 @@
+async function changeRole(userId){
+  fetch(`/api/users/premium/${userId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .then((response) => {
+    if (response.status === 404) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'User not found',
+      });
+    } else if (response.status === 403) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'User not finished your documentation',
+      });
+    } else if (response.ok) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'user role was successfully changed',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Error when trying to change the role',
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
+async function deleteUser(userId){
+  fetch(`/api/users/${userId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .then((response) => {
+    if (response.status === 404) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'User not found',
+      });
+    } else if (response.ok) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'User deleted',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'An error occurred while deleting the user.',
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
 async function deleteProduct(productId){
   fetch(`/api/products/${productId}`, {
     method: "DELETE",

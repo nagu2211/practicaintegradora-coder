@@ -5,7 +5,7 @@ class UserModel {
   async getAllUsers() {
     const users = await UserModelMongoose.find(
       {},
-      { _id: true, firstName: true, lastName: true, email: true }
+      { firstName: true, lastName: true, email: true, role: true }
     );
     return users;
   }

@@ -3,7 +3,36 @@ import { userService } from '../services/user.service.js';
 import { createHash } from '../utils/bcrypt.js';
 import { formatCurrentDate } from '../utils/currentDate.js';
 import { UserModelMongoose } from '../DAO/mongo/models/user.model.mongoose.js';
+import { emailService } from '../services/email.service.js';
 class ViewUsersController {
+  allUsers = async (req, res) => {
+    try {
+      const allUsers = await userService.getAll();
+      return res.status(200).render('users', { allUsers });
+      // return res.status(200).json({
+      //   status: 'success',
+      //   msg: 'all users',
+      //   payload: users,
+      // });
+    } catch (e) {
+      req.logger.error(`Error in home : ${e.message}` + formatCurrentDate);
+      return res.status(500).render('error-page', { msg: 'unexpected error on the server' });
+    }
+  };
+  deleteUserForInactivity = async (req, res) => {
+    try {
+      const twoDaysAgo = new Date();
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+
+      const inactiveUsers = await UserModelMongoose.find({ last_connection: { $lt: oneMinuteAgo } });
+      const emailSentDueToInactivity = await emailService.emailSentDueToInactivity(inactiveUsers);
+      const deletedUsers = await UserModelMongoose.deleteMany({ last_connection: { $lt: oneMinuteAgo } });
+
+      res.json({ message: `Deleted users ${deletedUsers.deletedCount} : a warning email has been sent to all deleted users` });
+    } catch (error) {
+      res.status(500).json({ error: 'Error while deleting inactive users.' });
+    }
+  };
   home = async (req, res) => {
     try {
       return res.status(200).render('home');
@@ -80,19 +109,33 @@ class ViewUsersController {
         return res.status(404).render('error-page', { msg: 'user not found' });
       } else if (user.role == 'premium') {
         const toggleUserRole = await userService.toggleUserRole(uid);
-        res.status(200).render('success', { msg: 'your role was changed successfully , role : ' + toggleUserRole });
+        res.status(200).render('success', { msg: 'user role was successfully changed , role : ' + toggleUserRole });
       } else {
         if (existingAccount && existingIdentification && existingAdress) {
           const toggleUserRole = await userService.toggleUserRole(uid);
 
-          res.status(200).render('success', { msg: 'your role was changed successfully , role : ' + toggleUserRole });
+          res.status(200).render('success', { msg: 'user role was successfully changed , role : ' + toggleUserRole });
         } else {
-          return res.status(404).render('error-page', { msg: 'the user has not finished processing their documentation. ' });
+          return res.status(403).render('error-page', { msg: 'the user has not finished processing their documentation. ' });
         }
       }
     } catch (e) {
       req.logger.error(`Error when trying to change the role ${e.message}` + formatCurrentDate);
       return res.status(500).render('error-page', { msg: 'server error : it has not been possible to change the role of the user' });
+    }
+  };
+  deleteUser = async (req, res) => {
+    try {
+      const { _id } = req.params;
+      const deleteUser = await userService.deleteOne(_id);
+      if (!deleteUser) {
+        return res.status(404).render('error-page', { msg: 'user not found' });
+      } else {
+        return res.status(200).render('success', { msg: 'deleted user' });
+      }
+    } catch (e) {
+      req.logger.error(`Error when trying to delete the user ${e.message}` + formatCurrentDate);
+      return res.status(500).render('error-page', { msg: 'server error : it has not been possible to delete the user' });
     }
   };
 }

@@ -60,3 +60,7 @@ usersRouter.post('/:uid/documents',uploader.fields([
     return res.status(500).json({ status: "error", error: "Error interno del servidor" });
   }
 });
+
+usersRouter.get('/', viewUsersController.allUsers);
+usersRouter.delete('/', viewUsersController.deleteUserForInactivity);
+usersRouter.delete('/:_id', viewUsersController.deleteUser);
