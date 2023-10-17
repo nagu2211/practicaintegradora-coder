@@ -1,3 +1,41 @@
+async function checkout(cartId){
+  fetch(`/api/carts/${cartId}/purchase`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .then((response) => {
+    if (response.status === 404) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Cart does not exist/not found',
+      });
+    } else if (response.status === 400) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Products not found',
+      });
+    } else if (response.ok) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Your purchase has been completed successfully(an email was sent with your purchase details)',
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Error trying to finish the purchase',
+      });
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
 async function changeRole(userId){
   fetch(`/api/users/premium/${userId}`, {
     method: "POST",

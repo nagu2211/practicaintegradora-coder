@@ -117,13 +117,14 @@ class ProductsController {
       const _id = req.params._id;
       const foundProduct = await productService.getProductById(_id);
       let ownerOfProduct = foundProduct.owner;
+      let titleOfProduct = foundProduct.title;
       console.log(ownerOfProduct)
       switch (req.session.user.role) {
         case 'admin':
           const deleted = await productService.deleteOne(_id);
           if (deleted?.deletedCount > 0) {
             if (ownerOfProduct != 'admin') {
-              await emailService.productRemovalNoticeEmail(ownerOfProduct);
+              await emailService.productRemovalNoticeEmail(ownerOfProduct,titleOfProduct);
               res.status(200).render('success', { msg: 'product deleted' });
             } else {
               res.status(200).render('success', { msg: 'product deleted' });

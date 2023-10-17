@@ -41,11 +41,7 @@ class CartController {
     try {
       const { _id } = req.params;
       const cart = await cartService.getOneCart(_id);
-      return res.status(200).json({
-        status: "success",
-        msg: "cart found",
-        payload: cart,
-      });
+      return res.status(200).render("cart",{cart,_id});
     } catch (e) {
       req.logger.error(`Error in getOneCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
@@ -159,29 +155,16 @@ class CartController {
       const { cid } = req.params;
       const cart = await cartService.getOneCartById(cid);
       if (!cart) {
-        return res
-          .status(404)
-          .json({ status: "error", message: "Cart not found" });
+        return res.status(404).render("error-page",{msg: "Cart not found"})
       }
       const createTicket = await ticketService.createTicket(cid)
       if (createTicket == null) {
-        return res
-          .status(400)
-          .json({
-            message: `Product/s not found`,
-          });
+        return res.status(400).render("error-page",{msg: "Product/s not found"})
       }
-  
-      return res
-        .status(200)
-        .json({ status: "success", message: "Compra completada con éxito", payload : createTicket});
+      return res.status(200).render("success",{msg: "Compra completada con éxito,an email was sent with your purchase details"})
     } catch (e) {
       req.logger.error(`Error in checkout : ${e.message}` + formatCurrentDate)
-      return res.status(500).json({
-        status: "error",
-        msg: "something went wrong :(",
-        payload: {},
-      });
+      return res.status(500).render("error-page",{msg: "something went wrong :("})
     }
   };
 }

@@ -64,12 +64,12 @@ class EmailService {
       });
     }
   }
-  async productRemovalNoticeEmail(ownerOfProduct) {
+  async productRemovalNoticeEmail(ownerOfProduct,titleOfProduct) {
     const result = await transportNodemailer.sendMail({
       from: ' ALWAYS FRESH <' + env.googleEmail + '>',
         to: ownerOfProduct,
         subject: 'Your product has been removed',
-        text: 'Your product has been removed by an administrator from our page, sorry for the inconvenience',
+        text: `Your product: ${titleOfProduct} , has been removed by an administrator from our page, sorry for the inconvenience`,
     });
   }
 }
