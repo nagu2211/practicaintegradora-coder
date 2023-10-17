@@ -54,7 +54,9 @@ class SessionsController {
       } else {
         res.status(500).render('error-page', { msg: 'user not found' });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
   githubCallback = (req, res) => {
     req.session.user = req.user;

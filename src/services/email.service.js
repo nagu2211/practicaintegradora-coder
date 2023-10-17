@@ -1,15 +1,13 @@
-import { __dirname } from '../config.js';
-import { transportNodemailer } from '../app.js';
-import env from '../config/environment.config.js';
 import { randomBytes } from 'crypto';
-import environmentConfig from '../config/environment.config.js';
-import { RecoverCodesModelMongoose } from '../DAO/mongo/models/recover-codes.model.mongoose.js';
+import { transportNodemailer } from '../app.js';
+import { __dirname } from '../config.js';
+import env from '../config/environment.config.js';
 import { recoverCodeService } from './recoverCode.service.js';
 
 class EmailService {
   async sendTicketForEmail(ticket, userCart) {
     const result = await transportNodemailer.sendMail({
-      from: ' Correo Test Backend <' + env.googleEmail + '>',
+      from: ' ALWAYS FRESH <' + env.googleEmail + '>',
       to: userCart.email,
       subject: 'Ticket de compra',
       html: `
@@ -42,7 +40,7 @@ class EmailService {
     const codeSaved = await recoverCodeService.createCode(email, code, expire);
 
     const result = await transportNodemailer.sendMail({
-      from: ' Correo Test Backend <' + env.googleEmail + '>',
+      from: ' ALWAYS FRESH <' + env.googleEmail + '>',
       to: email,
       subject: 'Reset Password',
       html: `
@@ -59,12 +57,20 @@ class EmailService {
   async emailSentDueToInactivity(inactiveUsers) {
     for (const user of inactiveUsers) {
       const result = await transportNodemailer.sendMail({
-        from: ' Correo Test Backend <' + env.googleEmail + '>',
+        from: ' ALWAYS FRESH <' + env.googleEmail + '>',
         to: user.email,
         subject: 'Your account has been deleted due to inactivity',
         text: 'Your account has been deleted due to inactivity in our system.',
       });
     }
+  }
+  async productRemovalNoticeEmail(ownerOfProduct) {
+    const result = await transportNodemailer.sendMail({
+      from: ' ALWAYS FRESH <' + env.googleEmail + '>',
+        to: ownerOfProduct,
+        subject: 'Your product has been removed',
+        text: 'Your product has been removed by an administrator from our page, sorry for the inconvenience',
+    });
   }
 }
 
