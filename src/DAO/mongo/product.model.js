@@ -19,7 +19,7 @@ class ProductModel {
       async paginate(querypage) {
         const queryResult = await ProdModelMongoose.paginate(
             {},
-            { limit: 5, page: querypage || 1 }
+            { limit: 6, page: querypage || 1 }
           );
           return queryResult
       }

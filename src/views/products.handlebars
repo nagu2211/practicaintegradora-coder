@@ -1,55 +1,85 @@
-<div class='userNav'>
-  {{#if emailSession}}
-    <p>Hello,
-      {{firstNameSession}}. Your role is
-      {{roleSession}}
-      <a href='/logout'><button class='btn btn-danger'>
-          <i class='fa-solid fa-right-from-bracket'></i></button></a></p>
-  {{/if}}
-  {{#if isAdmin}}
-    <a href='/api/users'><button>ADMINISTRAR</button></a>
-  {{/if}}
-</div>
-<nav class='navbar'>
-  <div class='logo'>
-    <img src="./images/FreshBgn't.png" alt='' />
-  </div>
-</nav>
-
-<section class='products'>
-  <button class='btnAdd' onclick='modal()'>create Product</button>
-  <div class='all-products'>
-    {{#each productsView.prodsPaginated}}
-      <div class='product animate__animated animate__pulse'>
-
-        <div class='card' style='width: 18rem;'>
-          <img src={{this.thumbnail}} class='card-img-top img-product' alt='img-product' />
-          <div class='card-body'>
-            <h5 class='card-title'>{{this.title}}</h5>
-            <p class='card-text'><span>price
-                <i class='fa-solid fa-arrow-down'></i></span><br />${{this.price}}(ARS)/k</p>
-            <a href='/products/{{this._id}}' class='btn btn-primary'>Details</a>
-            <button class='btn btn-success' onclick="main('{{this._id}}')">Add to Cart</button>
-            {{#if ../isAdmin}}
-              <button class='btn btn-danger' onclick="deleteProduct('{{this._id}}')">Delete Product</button>
+<div class='container-products-main'>
+  <nav class='navbar navbar-expand-lg navbar-dark bg-transparent'>
+    <div class='container'>
+      <a class='navbar-brand fs-4' href='#'>ALWAYS FRESH</a>
+      <button class='navbar-toggler shadow-none border-0' type='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasNavbar' aria-controls='offcanvasNavbar' aria-label='Toggle navigation'>
+        <span class='navbar-toggler-icon'></span>
+      </button>
+      <div class='sidebar offcanvas offcanvas-start' tabindex='-1' id='offcanvasNavbar' aria-labelledby='offcanvasNavbarLabel'>
+        <div class='offcanvas-header text-white border-bottom'>
+          <h5 class='offcanvas-title' id='offcanvasNavbarLabel'>Offcanvas</h5>
+          <button type='button' class='btn-close btn-close-white shadow-none' data-bs-dismiss='offcanvas' aria-label='Close'></button>
+        </div>
+        <div class='offcanvas-body d-flex flex-column flex-lg-row p-4 p-lg-0'>
+          <ul class='navbar-nav justify-content-center align-items-center fs-5 flex-grow-1 pe-3'>
+            <li class='nav-item mx-2'>
+              <a class='nav-link active' aria-current='page' href='/products'>Home</a>
+            </li>
+            <li class='nav-item mx-2'>
+              <button class='nav-link' onclick='modal()'>Add Product</button>
+            </li>
+            {{#if isAdmin}}
+              <li class='nav-item mx-2'>
+                <a class='nav-link' href='/api/users'>Manage users</a>
+              </li>
             {{/if}}
+          </ul>
+          <div class='d-flex flex-column justify-content-center align-items-center'>
+            <p class='text-white'>role: {{roleSession}}</p>
+            <div class="flex-row">
+              <a href='/logout' class='text-white text-decoration-none px-3 py-1 rounded-4' style='background-color: #f94ca4;'>Log Out</a>
+              <a href='#' class='text-white text-decoration-none px-3 py-1 rounded-4' style='background-color: #4c6ff9;'><i class='fa-solid fa-cart-shopping'></i></a>
+            </div>
           </div>
         </div>
       </div>
-    {{/each}}
-  </div>
-  <h3>pagination</h3>
-  <div>
-    {{#if productsView.hasPrevPage}}
-      <a href='/products?querypage={{productsView.prevPage}}&limit={{productsView.limit}}'>⬅️</a>
-    {{/if}}
-    page
-    {{productsView.page}}
-    of
-    {{productsView.totalPages}}
-    {{#if productsView.hasNextPage}}
-      <a href='/products?querypage={{productsView.nextPage}}&limit={{productsView.limit}}'>➡️</a>
-    {{/if}}
+    </div>
+  </nav>
+  <section class='products'>
 
-  </div>
-</section>
+    <div class='container py-5 text-white'>
+      <div>
+        {{#if productsView.hasPrevPage}}
+          <a href='/products?querypage={{productsView.prevPage}}&limit={{productsView.limit}}'>⬅️</a>
+        {{/if}}
+        page
+        {{productsView.page}}
+        of
+        {{productsView.totalPages}}
+        {{#if productsView.hasNextPage}}
+          <a href='/products?querypage={{productsView.nextPage}}&limit={{productsView.limit}}'>➡️</a>
+        {{/if}}
+      </div>
+      <div class='row row-cols-1 row-cols-md-3 g-4 py-5'>
+
+        {{#each productsView.prodsPaginated}}
+          <div class='col'>
+            <div class='card'>
+              <img src={{this.thumbnail}} class='card-img-top' alt='product' />
+              <div class='card-body'>
+                <h5 class='card-title'>{{this.title}}</h5>
+                <h3>${{this.price}}</h3>
+                <a href='/products/{{this._id}}' class='btn btn-primary'>Details</a>
+              </div>
+              <div class='d-flex flex-column flex-lg-row justify-content-center align-items-center mb-3 p-3'>
+                <button class='btn btn-success' onclick="main('{{this._id}}')"><i class='fa-solid fa-cart-arrow-down'></i></button>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+      <div>
+        {{#if productsView.hasPrevPage}}
+          <a href='/products?querypage={{productsView.prevPage}}&limit={{productsView.limit}}'>⬅️</a>
+        {{/if}}
+        page
+        {{productsView.page}}
+        of
+        {{productsView.totalPages}}
+        {{#if productsView.hasNextPage}}
+          <a href='/products?querypage={{productsView.nextPage}}&limit={{productsView.limit}}'>➡️</a>
+        {{/if}}
+      </div>
+    </div>
+  </section>
+</div>
