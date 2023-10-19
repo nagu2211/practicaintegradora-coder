@@ -1,165 +1,237 @@
-async function checkout(cartId){
+async function removeProductFromCart(cartId,productId) {
+  fetch(`/api/carts/${cartId}/product/${productId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'The product has been removed from your cart',
+        });
+        setTimeout(function () {
+          location.reload();
+        }, 2000);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Error trying to delete product from cart',
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+async function emptyCart(cartId) {
+  fetch(`/api/carts/${cartId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Your cart has been emptied',
+        });
+        setTimeout(function () {
+          location.reload();
+        }, 2000);
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Error trying to empty cart',
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+async function checkout(cartId) {
   fetch(`/api/carts/${cartId}/purchase`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   })
-  .then((response) => {
-    if (response.status === 404) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Cart does not exist/not found',
-      });
-    } else if (response.status === 400) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Products not found',
-      });
-    } else if (response.ok) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Your purchase has been completed successfully(an email was sent with your purchase details)',
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Error trying to finish the purchase',
-      });
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+    .then((response) => {
+      if (response.status === 404) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Cart does not exist/not found',
+        });
+      } else if (response.status === 400) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Products not found',
+        });
+      } else if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Your purchase has been completed successfully(an email was sent with your purchase details)',
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Error trying to finish the purchase',
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 }
-async function changeRole(userId){
+async function changeRole(userId) {
   fetch(`/api/users/premium/${userId}`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   })
-  .then((response) => {
-    if (response.status === 404) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'User not found',
-      });
-    } else if (response.status === 403) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'User not finished your documentation',
-      });
-    } else if (response.ok) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'user role was successfully changed',
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Error when trying to change the role',
-      });
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+    .then((response) => {
+      if (response.status === 404) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'User not found',
+        });
+      } else if (response.status === 403) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'User not finished your documentation',
+        });
+      } else if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'user role was successfully changed',
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Error when trying to change the role',
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 }
-async function deleteUser(userId){
+async function deleteUser(userId) {
   fetch(`/api/users/${userId}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   })
-  .then((response) => {
-    if (response.status === 404) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'User not found',
-      });
-    } else if (response.ok) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'User deleted',
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'An error occurred while deleting the user.',
-      });
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+    .then((response) => {
+      if (response.status === 404) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'User not found',
+        });
+      } else if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'User deleted',
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'An error occurred while deleting the user.',
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 }
-async function deleteProduct(productId){
+async function deleteProduct(productId) {
   fetch(`/api/products/${productId}`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   })
-  .then((response) => {
-    if (response.status === 404) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Product not found',
-      });
-    } else if (response.status === 401) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'unauthorized user',
-      });
-    }  else if (response.ok) {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'product deleted',
-      });
-    } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'An error occurred while deleting the product.',
-      });
-    }
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+    .then((response) => {
+      if (response.status === 404) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Product not found',
+        });
+      } else if (response.status === 401) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'unauthorized user',
+        });
+      } else if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'product deleted',
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'An error occurred while deleting the product.',
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
 }
 async function modal() {
-  const {value : formValues } = await Swal.fire({
-    title: "Create new product",
-    html:`
-    <div class="containerForm" >
-    <form id="productForm" method="post" action="/api/products/" >
-        <input type="text" placeholder="Product title" name="title" required>
-        <input type="text" placeholder="Product description" name="description" required>
-        <input type="text" placeholder="Product code" name="code" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-        <input type="text" placeholder="Product price" name="price" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-        <input type="text" placeholder="Product stock" name="stock" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-        <input type="text" placeholder="Product category" name="category" required>
-        <input type="text" placeholder="Product image" name="thumbnail" required>
-    </form>
+  const { value: formValues } = await Swal.fire({
+    title: 'Create new product',
+    html: `
+    <div class='container mt-3 mb-1'>
+    <form class='row g-3' id='productForm' method='post' action="/api/products/">
+    <div class='col-md-12'>
+      <input type="text" name="title" class='form-control' placeholder="Product title" required />
     </div>
-    `,
+    <div class='col-md-12'>
+      <textarea type="text" class='form-control' placeholder="Product Description. Max (80) caracteres" name="description" maxlength="80" required></textarea>
+    </div>
+    <div class='col-md-6'>
+      <input class='form-control' type="text" name="code" placeholder="Code" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required/>
+    </div>
+    <div class='col-md-6'>
+      <input class='form-control' type="text" name="price" placeholder="Price" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required/>
+    </div>
+    <div class='col-md-6'>
+    <input class='form-control' type="text" name="stock" placeholder="Stock" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required/>
+    </div>
+    <div class='col-md-6'>
+      <input class='form-control' type="text" placeholder="Category" name="category" required />
+    </div>
+    <div class='col-md-12'>
+      <input class='form-control' type="text" placeholder="URL image" name="thumbnail" required />
+    </div>
+  </form>
+  </div>
+`,
     showDenyButton: true,
     confirmButtonText: 'Add Product',
     denyButtonText: `Cancel`,
@@ -173,7 +245,7 @@ async function modal() {
       const price = document.querySelector("#productForm input[name='price']").value;
 
       return { title, thumbnail, description, code, stock, category, price };
-    }
+    },
   });
   if (formValues) {
     try {
@@ -186,62 +258,58 @@ async function modal() {
       });
 
       if (response.ok) {
-        Swal.fire(
-          'SUCCESS',
-          'Product added successfully',
-          'success'
-        )
+        Swal.fire('SUCCESS', 'Product added successfully', 'success');
       } else {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: 'failed to add product',
-          footer: 'you must be an admin to add a product'
-        })
+          footer: 'you must be an admin to add a product',
+        });
       }
     } catch (error) {
-      Swal.fire("Error occurred while adding product");
+      Swal.fire('Error occurred while adding product');
       console.error(error);
     }
   }
 }
 
-window.addEventListener("beforeunload", function (event) {
-  const form = document.getElementById("formResetPassword");
+window.addEventListener('beforeunload', function (event) {
+  const form = document.getElementById('formResetPassword');
   if (form.checkValidity && !form.checkValidity()) {
-      event.preventDefault();
-      event.returnValue = ""; 
+    event.preventDefault();
+    event.returnValue = '';
   }
 });
 
-async function validateForm(event){
-  try{
+async function validateForm(event) {
+  try {
     event.preventDefault();
-    let newPass = document.getElementById("newPass").value;
-    let confirmPass = document.getElementById("confirmPass").value;
+    let newPass = document.getElementById('newPass').value;
+    let confirmPass = document.getElementById('confirmPass').value;
 
     if (newPass !== confirmPass) {
-        alert("Passwords do not match. Please try again.");
-    } else { 
-      document.getElementById("formResetPassword").action = "/api/users/reset-password";
-      document.getElementById("formResetPassword").submit();
+      alert('Passwords do not match. Please try again.');
+    } else {
+      document.getElementById('formResetPassword').action = '/api/users/reset-password';
+      document.getElementById('formResetPassword').submit();
     }
-  } catch(e) {
-    console.log(e)
+  } catch (e) {
+    console.log(e);
   }
 }
 
 async function getCurrentSession() {
   try {
-    const response = await fetch("/api/sessions/current", {
-      method: "GET",
+    const response = await fetch('/api/sessions/current', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
-    
+
     if (!response.ok) {
-      throw new Error("Failed to fetch current session");
+      throw new Error('Failed to fetch current session');
     }
 
     const sessionData = await response.json();
@@ -256,46 +324,46 @@ async function main(productId) {
     const cartId = await getCurrentSession();
     const products = { products: { product: productId } };
     fetch(`/api/carts/${cartId}/product/${productId}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(products),
     })
-    .then((response) => {
-      if (response.status === 409) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'you cannot add your product to your cart',
-        });
-      } else if (response.ok) {
-        Toastify({
-          text: "Product added to cart",
-          duration: 1500,
-          destination: `/api/carts/${cartId}`,
-          newWindow: true,
-          gravity: "top", 
-          position: "center", 
-          stopOnFocus: true, 
-          style: {
-            background: "linear-gradient(to right, #00b09b, #96c93d)",
-          },
-          onClick: function(){} 
-        }).showToast();
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'An error occurred while adding the product.',
-        });
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .then((response) => {
+        if (response.status === 409) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'you cannot add your product to your cart',
+          });
+        } else if (response.ok) {
+          Toastify({
+            text: 'Product added to cart',
+            duration: 1500,
+            destination: `/api/carts/${cartId}`,
+            newWindow: true,
+            gravity: 'top',
+            position: 'center',
+            stopOnFocus: true,
+            style: {
+              background: 'linear-gradient(to right, #00b09b, #96c93d)',
+            },
+            onClick: function () {},
+          }).showToast();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'An error occurred while adding the product.',
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   } catch (error) {
-    console.log("Error in main: " + error);
+    console.log('Error in main: ' + error);
   }
 }
 

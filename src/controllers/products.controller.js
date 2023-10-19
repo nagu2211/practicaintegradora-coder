@@ -118,7 +118,6 @@ class ProductsController {
       const foundProduct = await productService.getProductById(_id);
       let ownerOfProduct = foundProduct.owner;
       let titleOfProduct = foundProduct.title;
-      console.log(ownerOfProduct)
       switch (req.session.user.role) {
         case 'admin':
           const deleted = await productService.deleteOne(_id);

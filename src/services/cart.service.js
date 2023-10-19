@@ -20,6 +20,7 @@ class CartService {
         thumbnail: item.product.thumbnail,
         title: item.product.title,
         price: item.product.price,
+        productId: item.product._id,
         quantity: item.quantity,
         _id:item._id
       };

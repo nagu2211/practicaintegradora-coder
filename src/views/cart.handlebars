@@ -48,12 +48,14 @@
             <div>${{this.price}}k</div>
           </div>
         </div>
+    <button class='btn btn-danger' onclick="removeProductFromCart('{{../_id}}','{{this.productId}}')"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>
   {{/each}}
   {{#if notEmptyCart}}
   <div class="btnCheckout">
     <button class='btn btn-primary' onclick="checkout('{{_id}}')">Checkout</button>
+    <button class='btn btn-danger' onclick="emptyCart('{{_id}}')">Empty cart</button>
   </div>
   {{/if}}
 </div>
