@@ -270,11 +270,19 @@ async function main(productId) {
           text: 'you cannot add your product to your cart',
         });
       } else if (response.ok) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'product added to cart',
-        });
+        Toastify({
+          text: "Product added to cart",
+          duration: 1500,
+          destination: `/api/carts/${cartId}`,
+          newWindow: true,
+          gravity: "top", 
+          position: "center", 
+          stopOnFocus: true, 
+          style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+          },
+          onClick: function(){} 
+        }).showToast();
       } else {
         Swal.fire({
           icon: 'error',

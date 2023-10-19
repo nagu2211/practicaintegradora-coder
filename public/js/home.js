@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   Swal.fire({
-    imageUrl: "../images/Fresh.png",
+    imageUrl: "../images/Fresh.webp",
     html: `
     <h3>WELCOME TO <h3 class="animate__animated animate__bounce">ALWAYS FRESH!!</h3></h3>
     <p>Please login to continue</p>

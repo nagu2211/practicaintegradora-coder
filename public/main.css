@@ -11,27 +11,26 @@ h1 {
 }
 
 .section-login {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), url('./images/bg8.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: #0093E9;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
 }
 .section-register {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), url('./images/bg9.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: #FFDEE9;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), linear-gradient(0deg, #FFDEE9 0%, #B5FFFC 100%);
+}
+.section-forgotPass {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), linear-gradient( 109.6deg,  rgba(45,116,213,1) 11.2%, rgba(121,137,212,1) 91.2% );
 }
 .section-success {
   height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), url('./images/bg-success.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), url('./images/bg-success.webp');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 .section-error {
   height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), url('./images/bg-error.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.533), rgba(0, 0, 0, 0.533)), url('./images/bg-error.webp');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -45,19 +44,19 @@ h1 {
   background-size: cover;
 }
 .bg-l-login-form {
-  background-image: url('./images/welcome.jpg');
+  background-image: url('./images/welcome.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
 .bg-l-register-form {
-  background-image: url('./images/joinus.jpg');
+  background-image: url('./images/joinus.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
 }
 .bg-l-forgotPass-form {
-  background-image: url('./images/bg10.jpg');
+  background-image: url('./images/bg10.webp');
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -572,7 +571,7 @@ h1 .fa-circle-xmark {
 /* cart */
 .myCart{
   min-height: 100vh;
-  background: url('images/bg-cart.jpg') rgba(0, 0, 0, 0.3);
+  background: url('images/bg-cart.webp') rgba(0, 0, 0, 0.3);
   background-blend-mode: multiply;
   background-position: center;
   background-size: contain;
@@ -630,4 +629,19 @@ h1 .fa-circle-xmark {
   .cart .card {
     font-size: 0.9em;
   }
+}
+/* resetPassword */
+.formResetPassword{
+  background-color: #FF9A8B;
+  background-image: linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.formResetPassword .container{
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
 }
