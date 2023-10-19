@@ -41,7 +41,11 @@ class CartController {
     try {
       const { _id } = req.params;
       const cart = await cartService.getOneCart(_id);
-      return res.status(200).render("cart",{cart,_id});
+      let notEmptyCart = true
+      if(cart.length == 0){
+        notEmptyCart = false
+      }
+      return res.status(200).render("cart",{cart,_id,notEmptyCart});
     } catch (e) {
       req.logger.error(`Error in getOneCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({

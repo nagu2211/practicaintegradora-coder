@@ -1,20 +1,68 @@
-<section class="products">
-  <h1>ALL PRODUCTS</h1>
-  <div class="all-products">
-    <div class="product">
-      <img src={{product.[0].thumbnail}} alt="img-product" />
-      <div class="product-info">
-        <h4 class="product-title">{{product.[0].title}}</h4>
-        <p><span>id <i class="fa-solid fa-arrow-down"></i></span><br />{{product.[0]._id}}</p>
-        <p><span>description <i class="fa-solid fa-arrow-down"></i></span><br />{{product.[0].description}}</p>
-        <p><span>code <i class="fa-solid fa-arrow-down"></i></span><br />{{product.[0].code}}</p>
-        <p><span>stock <i class="fa-solid fa-arrow-down"></i></span><br />{{product.[0].stock}}k</p>
-        <p><span>category <i class="fa-solid fa-arrow-down"></i></span><br />{{product.[0].category}}</p>
-        <p><span>price <i class="fa-solid fa-arrow-down"></i></span><br />${{product.[0].price}}(ARS)/k</p>
-        <p><span>status <i class="fa-solid fa-arrow-down"></i></span><br />{{product.[0].status}}</p>
-        <button onclick="main('{{product.[0]._id}}')">Add to Cart</button>
+<div class='container-products-main'>
+<nav class='navbar navbar-expand-lg navbar-dark bg-transparent'>
+    <div class='container'>
+      <a class='navbar-brand fs-4' href='/products'>ALWAYS FRESH</a>
+      <button class='navbar-toggler shadow-none border-0' type='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasNavbar' aria-controls='offcanvasNavbar' aria-label='Toggle navigation'>
+        <span class='navbar-toggler-icon'></span>
+      </button>
+      <div class='sidebar offcanvas offcanvas-start' tabindex='-1' id='offcanvasNavbar' aria-labelledby='offcanvasNavbarLabel'>
+        <div class='offcanvas-header text-white border-bottom'>
+          <h5 class='offcanvas-title' id='offcanvasNavbarLabel'>Offcanvas</h5>
+          <button type='button' class='btn-close btn-close-white shadow-none' data-bs-dismiss='offcanvas' aria-label='Close'></button>
+        </div>
+        <div class='offcanvas-body d-flex flex-column flex-lg-row p-4 p-lg-0'>
+          <ul class='navbar-nav justify-content-center align-items-center fs-5 flex-grow-1 pe-3'>
+            <li class='nav-item mx-2'>
+              <a class='nav-link active' aria-current='page' href='/products'>Home</a>
+            </li>
+            <li class='nav-item mx-2'>
+              <button class='nav-link' onclick='modal()'>Add Product</button>
+            </li>
+            {{#if isAdmin}}
+              <li class='nav-item mx-2'>
+                <a class='nav-link' href='/api/users'>Manage users</a>
+              </li>
+            {{/if}}
+          </ul>
+          <div class='d-flex flex-column justify-content-center align-items-center'>
+            <p class='text-white'>role: {{roleSession}}</p>
+            <div class="flex-row">
+              <a href='/logout' class='text-white text-decoration-none px-3 py-1 rounded-4' style='background-color: #f94ca4;'>Log Out</a>
+              <a href='/api/carts/{{cartSession}}' class='text-white text-decoration-none px-3 py-1 rounded-4' style='background-color: #4c6ff9;'><i class='fa-solid fa-cart-shopping'></i></a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
+  </nav>
+  <section class="details">
+<div class='flex-box'>
+  <div class='left'>
+    <div class='big-img'>
+      <img src={{product.0.thumbnail}} />
+    </div>
+    <div class='images'>
+     <div class="btn-box">
+                <button class="cart-btn" onclick="main('{{product.[0]._id}}')">Add to Cart</button>
+            </div>
+    </div>
   </div>
+
+  <div class='right'>
+    <div class='pname'>Product : {{product.0.title}}</div>
+    <div class='price'>category : {{product.0.category}}</div>
+    <div class='price'>stock : {{product.0.stock}}k</div>
+    <div class='price'>${{product.0.price}}k</div>
+    <div class='size'>
+      <p>Description : {{product.0.description}}</p>
+    </div>
+    <div class='quantity'>
+      <p>Quantity :</p>
+      <input type='number' min='1' max={{product.0.stock}} value='1' />
+    </div>
+
+  </div>
+</div>
+</div>
 </section>
-<script src="/js/index.js"></script>
+<script src='/js/index.js'></script>
