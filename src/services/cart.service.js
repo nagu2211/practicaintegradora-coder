@@ -22,6 +22,7 @@ class CartService {
         price: item.product.price,
         productId: item.product._id,
         quantity: item.quantity,
+        subtotal: item.product.price * item.quantity,
         _id:item._id
       };
     });
@@ -38,17 +39,17 @@ class CartService {
   
   return cart;
   }
-  async addProductToCart(cid, pid) {
+  async addProductToCart(cid, pid, qtyProduct) {
     const cartFound = await cartModel.findById(cid);
     
     if (cartFound) {
-      let productToCart = await cartModel.quantityProdOfCart(cid, pid)
-      return productToCart
+      let productToCart = await cartModel.quantityProdOfCart(cid, pid, qtyProduct);
+      return productToCart;
     } else {
-      const newCart = cartModel.newCart(cid,pid)
+      const newCart = await cartModel.newCart(cid, pid);
       return newCart;
     }
-  };
+  }
 
   async removeProduct(cid, pid) {
     try {

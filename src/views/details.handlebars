@@ -43,7 +43,7 @@
     </div>
     <div class='images'>
      <div class="btn-box">
-                <button class="cart-btn" onclick="main('{{product.[0]._id}}')">Add to Cart</button>
+                <button class="cart-btn"  data-page="details" onclick="main('{{product.[0]._id}}')">Add to Cart</button>
             </div>
     </div>
   </div>
@@ -58,7 +58,7 @@
     </div>
     <div class='quantity'>
       <p>Quantity :</p>
-      <input type='number' min='1' max={{product.0.stock}} value='1' />
+      <input type='number' min='1' max={{product.0.stock}} value='1' id="quantityProdForCart"/>
     </div>
 
   </div>

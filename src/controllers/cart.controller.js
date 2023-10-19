@@ -43,10 +43,11 @@ class CartController {
       const cart = await cartService.getOneCart(_id);
       let notEmptyCart = true
       const roleSession = req.session.user.role
+      let total = cart.reduce((acc, product) => acc + (product.price * product.quantity), 0);
       if(cart.length == 0){
         notEmptyCart = false
       }
-      return res.status(200).render("cart",{cart,_id,notEmptyCart,roleSession});
+      return res.status(200).render("cart",{cart,_id,notEmptyCart,roleSession,total});
     } catch (e) {
       req.logger.error(`Error in getOneCart : ${e.message}` + formatCurrentDate)
       return res.status(500).json({
@@ -59,6 +60,8 @@ class CartController {
   addProductToCart = async (req, res) => {
     try {
       let { cid, pid } = req.params;
+      let qty = req.body
+      let qtyProduct = qty.products.quantity
       const productFound = await productService.getProductById(pid)
       if(req.session?.user?.email && productFound.owner == req.session.user.email){
         return res.status(409).json({
@@ -68,7 +71,7 @@ class CartController {
         });
         
       } else{
-        const cart = await cartService.addProductToCart(cid, pid);
+        const cart = await cartService.addProductToCart(cid, pid, qtyProduct);
 
         return res.status(200).json({
           status: "success",

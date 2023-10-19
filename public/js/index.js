@@ -321,8 +321,18 @@ async function getCurrentSession() {
 }
 async function main(productId) {
   try {
+    const button = event.target;
+    const currentPage = button.getAttribute("data-page");
+    
     const cartId = await getCurrentSession();
-    const products = { products: { product: productId } };
+    let products = {}
+    if (currentPage === "catalog") {
+      products = { products: { product: productId, quantity: 1 } };
+    }else if(currentPage === "details"){
+      const quantityInput = document.getElementById("quantityProdForCart");
+
+      products = { products: { product: productId, quantity: quantityInput.value } };
+    }
     fetch(`/api/carts/${cartId}/product/${productId}`, {
       method: 'PUT',
       headers: {

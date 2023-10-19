@@ -28,7 +28,7 @@
             <p class='text-white'>role: {{roleSession}}</p>
             <div class='flex-row'>
               <a href='/logout' class='text-white text-decoration-none px-3 py-1 rounded-4' style='background-color: #f94ca4;'>Log Out</a>
-              <a href='/api/carts/{{cartSession}}' class='text-white text-decoration-none px-3 py-1 rounded-4' style='background-color: #4c6ff9;'><i class='fa-solid fa-cart-shopping'></i></a>
+              <a href='#' class='text-white text-decoration-none px-3 py-1 rounded-4' style='background-color: #4c6ff9;'><i class='fa-solid fa-cart-shopping'></i></a>
             </div>
           </div>
         </div>
@@ -46,13 +46,16 @@
           </div>
           <div class='cta-section'>
             <div>${{this.price}}k</div>
+            <div>subtotal : ${{this.subtotal}}</div>
           </div>
         </div>
     <button class='btn btn-danger' onclick="removeProductFromCart('{{../_id}}','{{this.productId}}')"><i class="fa-solid fa-trash"></i></button>
       </div>
     </div>
   {{/each}}
+    
   {{#if notEmptyCart}}
+    <p class="text-center text-white">Total : ${{total}}</p>
   <div class="btnCheckout">
     <button class='btn btn-primary' onclick="checkout('{{_id}}')">Checkout</button>
     <button class='btn btn-danger' onclick="emptyCart('{{_id}}')">Empty cart</button>

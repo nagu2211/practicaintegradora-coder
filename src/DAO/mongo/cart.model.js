@@ -1,4 +1,4 @@
-import { CartModelMongoose } from "./models/cart.model.mongoose.js";
+import { CartModelMongoose } from './models/cart.model.mongoose.js';
 
 class CartModel {
   async getCarts() {
@@ -10,9 +10,7 @@ class CartModel {
     return newCart;
   }
   async findOneCart(_id) {
-    const cart = await CartModelMongoose.findOne({ _id: _id }).populate(
-      "products.product"
-    );
+    const cart = await CartModelMongoose.findOne({ _id: _id }).populate('products.product');
     return cart;
   }
   async findById(cid) {
@@ -26,26 +24,27 @@ class CartModel {
     });
     return newCart;
   }
-  async quantityProdOfCart(cid,pid){
+  async quantityProdOfCart(cid, pid, qtyProduct) {
     const cartFound = await CartModelMongoose.findById(cid);
-    const productFound = cartFound.products.find(
-      (product) => product.product.toString() === pid
-    );
+
+    if (!cartFound) {
+      const newCart = new CartModelMongoose({ _id: cid, products: [] });
+      newCart.products.push({ product: pid, quantity: parseInt(qtyProduct) });
+      await newCart.save();
+      return newCart;
+    }
+    const productFound = cartFound.products.find((product) => product.product.toString() === pid);
     if (productFound) {
-      productFound.quantity++;
+      productFound.quantity = parseInt(productFound.quantity) + parseInt(qtyProduct);
     } else {
-      cartFound.products.push({ product: pid, quantity: 1 });
+      cartFound.products.push({ product: pid, quantity: parseInt(qtyProduct) });
     }
     await cartFound.save();
     return cartFound;
   }
-  async findByIdAndUpdate(_id,products){
-    const cart = await CartModelMongoose.findByIdAndUpdate(
-        _id,
-        { products },
-        { new: true }
-      );
-      return cart;
+  async findByIdAndUpdate(_id, products) {
+    const cart = await CartModelMongoose.findByIdAndUpdate(_id, { products }, { new: true });
+    return cart;
   }
 }
 
