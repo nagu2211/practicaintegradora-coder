@@ -42,7 +42,7 @@ _Comprehensive Overview of API Development and Code Implementation_
 - Installation 'Node Js': https://nodejs.org/en
 - For product information, customer personal data, news and offers requests, login, register, and socket, I use a database 'Mongo db' : https://www.mongodb.com/es
 
-## Instalacion
+## How to install
 
 - ``` git clone https://github.com/nagu2211/practicaintegradora-coder.git ```
 - ``` npm install ```
