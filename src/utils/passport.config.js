@@ -30,7 +30,7 @@ export function iniPassport() {
       {
         clientID: env.githubClientId,
         clientSecret: env.githubClientSecret,
-        callbackURL: "/api/sessions/githubcallback",
+        callbackURL: "http://localhost:10000" + "/api/sessions/githubcallback",
       },
       passportController.github
     )
