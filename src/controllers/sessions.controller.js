@@ -60,7 +60,7 @@ class SessionsController {
   };
   githubCallback = (req, res) => {
     req.session.user = req.user;
-    res.redirect('https://alwaysfresh.onrender.com/products');
+    res.redirect('/products');
   };
   current = (req, res) => {
     const user = req.session.user;
