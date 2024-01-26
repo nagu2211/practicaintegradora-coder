@@ -30,7 +30,7 @@ export function iniPassport() {
       {
         clientID: env.githubClientId,
         clientSecret: env.githubClientSecret,
-        callbackURL: "https://alwaysfresh.onrender.com/products",
+        callbackURL: "/api/sessions/githubcallback",
       },
       passportController.github
     )
